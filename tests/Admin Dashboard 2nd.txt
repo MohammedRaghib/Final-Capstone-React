@@ -1,0 +1,945 @@
+// import React, { useState, useEffect } from "react";
+// import { Link } from "react-router-dom";
+
+// const AdminDashboard = ({ userInfo }) => {
+//   const [company, setCompanies] = useState();
+//   const [loading, setLoading] = useState(true);
+//   const [companyInfoFetched, setCompanyInfoFetched] = useState(false);
+//   const BaseURL = "http://127.0.0.1:8000/";
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [AllUsers, setAllUsers] = useState([]);
+//   const [NotCompanyUsers, SetNotCompanyUsers] = useState();
+//   const [CompanyInfo, setCompanyInfo] = useState({});
+
+//   useEffect(() => {
+//     const fetchCompanies = async () => {
+//       const response = await fetch(`${BaseURL}usercompanies/`, {
+//         headers: {
+//           Authorization: `Bearer ${userInfo.access}`,
+//         },
+//       });
+
+//       const data = await response.json();
+//       console.log("Companies data:", data);
+//       setCompanies(data.companies || []);
+//       console.table(company);
+//       setLoading(false);
+//     };
+
+//     fetchCompanies();
+//   }, []);
+//   useEffect(() => {
+//     if (company && !companyInfoFetched) {
+//       const firstCompany = company;
+//       if (firstCompany && firstCompany.id) {
+//         const getMoreCompanyInfo = async () => {
+//           const response = await fetch(
+//             `${BaseURL}companies/${firstCompany.id}/`,
+//             {
+//               headers: {
+//                 Authorization: `Bearer ${userInfo.access}`,
+//               },
+//             }
+//           );
+
+//           const data = await response.json();
+//           setCompanyInfoFetched(true);
+//           return data
+//         };
+
+//         const info = getMoreCompanyInfo();
+//         setCompanyInfo(info);
+//         console.log('Company Details:',CompanyInfo)
+//       }
+//     }
+//   }, [company, companyInfoFetched, userInfo]);
+//   const [UserForm, setUserForm] = useState({
+//     message: "",
+//     company_id: company?.id,
+//   });
+
+//   const fetchUsers = async (userInfo, searchQuery = "") => {
+//     const BaseURL = "http://127.0.0.1:8000/";
+//     const endpoint = `${BaseURL}api/users/`;
+//     const headers = {
+//       Authorization: `Bearer ${userInfo.access}`,
+//       "Content-Type": "application/json",
+//     };
+
+//     try {
+//       const response = await fetch(`${endpoint}?search=${searchQuery}`, {
+//         method: "GET",
+//         headers: headers,
+//       });
+
+//       if (response.ok) {
+//         const data = await response.json();
+//         console.log("Users fetched successfully:", data);
+//         return data.all_users;
+//       } else {
+//         const errorData = await response.json();
+//         console.error("Error:", errorData.detail);
+//         return null;
+//       }
+//     } catch (error) {
+//       console.error("Error fetching users:", error);
+//       return null;
+//     }
+//   };
+
+//   useEffect(() => {
+//     const getUsers = async () => {
+//       const users = await fetchUsers(userInfo, searchQuery);
+//       setAllUsers(users);
+//     };
+
+//     if (userInfo) {
+//       getUsers();
+//     }
+//   }, [userInfo, searchQuery]);
+
+//   const handleSearch = async () => {
+//     const users = await fetchUsers(userInfo, searchQuery);
+//     setAllUsers(users);
+//   };
+
+//   const InviteUser = async (e) => {
+//     const userID = e.target.value;
+//     try {
+//       setLoading(true);
+//       const notification = await fetch(`${BaseURL}/notifications/${userID}/`, {
+//         headers: {
+//           Authorization: `Bearer ${userInfo.access}`,
+//         },
+//         body: JSON.stringify(UserForm),
+//       });
+//       const data = await response.json();
+//       alert("User invited, awaiting response");
+//       console.log("Invited user,", data);
+//       setLoading(false);
+//     } catch (e) {
+//       setLoading(false);
+//       alert("Error inviting user");
+//       console.error("Error:", e);
+//     }
+//   };
+//   const AddTask = async (taskDetails) => {
+//     try {
+//       setLoading(true);
+
+//       const response = await fetch(`${BaseURL}companies/${company.id}/tasks/`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${userInfo.access}`,
+//         },
+//         body: JSON.stringify(taskDetails),
+//       });
+
+//       if (!response.ok) {
+//         throw new Error("Error creating task");
+//       }
+
+//       const data = await response.json();
+//       alert("Task created successfully");
+//       console.log("Created task:", data);
+//       setLoading(false);
+//     } catch (error) {
+//       setLoading(false);
+//       alert("Error creating task");
+//       console.error("Error:", error);
+//     }
+//   };
+//   const handleFormSubmit = async (e) => {
+//     e.preventDefault();
+//     const taskDetails = {
+//       title: e.target.title.value,
+//       description: e.target.description.value,
+//       assigned_to: e.target.assigned_to.value.split(","),
+//       company: company.id,
+//       due_date: e.target.due_date.value,
+//     };
+//     await AddTask(taskDetails);
+//   };
+
+//   if (loading) {
+//     return <p>Loading...</p>;
+//   }
+
+//   return (
+//     <div className="container-dashboard">
+//       <h2>Admin Dashboard</h2>
+//       {company ? (
+//         <main className="main-container">
+//           <h1 className="CompanyName">{company.name}</h1>
+//           <section className="UserCompany">
+//             {company?.users?.length > 0 ? (
+//               company.users.map((user) => {
+//                 return (
+//                   <li key={user.id} className="User">
+//                     {user.username}
+//                   </li>
+//                 );
+//               })
+//             ) : (
+//               <p>No users available</p>
+//             )}
+//           </section>
+//           <section className="AddUser">
+//             <section>
+//               <h3>Search Users</h3>
+//               <input
+//                 type="text"
+//                 placeholder="Search for users"
+//                 value={searchQuery}
+//                 onChange={(e) => setSearchQuery(e.target.value)}
+//               />
+//               <button onClick={handleSearch}>Search</button>
+//               <section>
+//                 <ul className="AllUsers">
+//                   {AllUsers?.map((user) => (
+//                     <li key={user.id}>{user.username}</li>
+//                   ))}
+//                 </ul>
+//               </section>
+//             </section>
+//             <section className="TaskCompany">
+//               {CompanyInfo?.tasks?.length > 0 ? (
+//                 CompanyInfo.tasks.map((task) => {
+//                   return (
+//                     <li key={task.id} className="Task">
+//                       <h3 className="TaskTitle">{task.title}</h3>
+//                       <p className="TaskDesc">{task.description}</p>
+//                       <span className="TaskStatus">
+//                         <b>{task.status}</b>
+//                       </span>
+//                       <details className="AllComments">
+//                         <summary className="CommentsLabel">Comments:</summary>
+//                         <article className="TaskCommments">
+//                           {CompanyInfo.tasks.comments.map((comment)=>{
+//                             <div className="Comment">
+//                               <h3 className="CommentUser">{comment.user.username}</h3>
+//                               <p className="CommnetContent">{comment.description}</p>
+//                             </div>
+//                           })}
+//                         </article>
+//                       </details>
+//                     </li>
+//                   );
+//                 })
+//               ) : (
+//                 <p>No tasks added</p>
+//               )}
+//             </section>
+//           </section>
+//         </main>
+//       ) : (
+//         <div>
+//           <p>You are not part of any company.</p>
+//           <Link to="/create-company">Create Company</Link>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AdminDashboard;
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./styles/admindash.css";
+
+const AdminDashboard = ({ userInfo }) => {
+  const [company, setCompanies] = useState();
+  const [loading, setLoading] = useState(true);
+  const [companyInfoFetched, setCompanyInfoFetched] = useState(false);
+  const BaseURL = "http://127.0.0.1:8000/";
+  const [searchQuery, setSearchQuery] = useState("");
+  const [AllUsers, setAllUsers] = useState([]);
+  const [CompanyInfo, setCompanyInfo] = useState({});
+  const [FilteredUsers, setFilteredUsers] = useState([]);
+  const [CompanyUsers, SetCompanyUsers] = useState([]);
+  const [FetchCount, setFetchCount] = useState(0);
+  const [TaskForm, setTaskForm] = useState({
+    taskTitle: "",
+    taskDescription: "",
+    dueDate: "",
+    status: "TODO",
+  });
+  const [assignedUsers, setAssignedUsers] = useState([]);
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [newCommentText, setNewCommentText] = useState("");
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await fetch(`${BaseURL}usercompanies/`, {
+          headers: {
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+        });
+        const data = await response.json();
+        console.log("Companies data:", data);
+        setCompanies(data.companies || []);
+      } catch (error) {
+        console.error("Error fetching companies:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCompanies();
+  }, []);
+
+  useEffect(() => {
+    const fetchCompanyInfo = async () => {
+      if (company && !companyInfoFetched) {
+        const firstCompany = company;
+        if (firstCompany.id) {
+          try {
+            const response = await fetch(
+              `${BaseURL}companies/${firstCompany.id}/`,
+              {
+                headers: {
+                  Authorization: `Bearer ${userInfo.access}`,
+                },
+              }
+            );
+            const data = await response.json();
+            setCompanyInfo(data);
+            setCompanyInfoFetched(true);
+            console.log("CompanyInfo:", data);
+          } catch (error) {
+            console.error("Error fetching company info:", error);
+          }
+        }
+      }
+    };
+    fetchCompanyInfo();
+  }, [company, companyInfoFetched, userInfo]);
+
+  const fetchUsers = async (userInfo, searchQuery = "") => {
+    const endpoint = `${BaseURL}api/users/`;
+    const headers = {
+      Authorization: `Bearer ${userInfo.access}`,
+      "Content-Type": "application/json",
+    };
+    try {
+      const response = await fetch(`${endpoint}?search=${searchQuery}`, {
+        method: "GET",
+        headers: headers,
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setFetchCount((prev) => (prev += 1));
+        console.log(FetchCount);
+        return data.all_users;
+      } else {
+        const errorData = await response.json();
+        console.error("Error:", errorData.detail);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const users = await fetchUsers(userInfo, searchQuery);
+      setAllUsers(users);
+    };
+    if (userInfo) {
+      getUsers();
+    }
+  }, [searchQuery]);
+
+  const handleSearch = async () => {
+    const users = await fetchUsers(userInfo, searchQuery);
+    setAllUsers(users);
+  };
+
+  const InviteUser = async (e) => {
+    const userid = e.target.value;
+    try {
+      setLoading(true);
+      const response = await fetch(`${BaseURL}notifications/${userid}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.access}`,
+        },
+        body: JSON.stringify({ message: "Invite", company_id: company.id }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error inviting user");
+      }
+
+      const data = await response.json();
+      alert("User invited, awaiting response");
+      console.log("Invited user,", data);
+    } catch (error) {
+      alert("Error inviting user");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const AddTask = async (taskDetails) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${BaseURL}companies/${company?.id}/tasks/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+          body: JSON.stringify(taskDetails),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Error creating task");
+      }
+      const data = await response.json();
+      alert("Task created successfully");
+      console.log("Created task:", data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      alert("Error creating task");
+      console.error("Error:", error);
+    }
+  };
+
+  const filterusers = () => {
+    if (!CompanyInfo || !CompanyInfo.noncompanyusers) {
+      return [];
+    }
+    const filtered_users = AllUsers.filter((ranuser) =>
+      CompanyInfo.noncompanyusers.some((user) => user.id == ranuser.id)
+    );
+
+    setFilteredUsers(filtered_users);
+  };
+
+  useEffect(() => {
+    filterusers();
+  }, [CompanyInfo, AllUsers]);
+
+  const companyusers = () => {
+    if (!CompanyInfo || !CompanyInfo.users) {
+      return [];
+    }
+
+    const filtered_users = AllUsers.filter((ranuser) =>
+      CompanyInfo.users.some((user) => user.id === ranuser.id)
+    );
+    SetCompanyUsers(filtered_users);
+  };
+
+  useEffect(() => {
+    companyusers();
+  }, [CompanyInfo, AllUsers]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setTaskForm({
+      ...TaskForm,
+      [name]: value,
+    });
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const taskDetails = {
+      title: TaskForm.taskTitle,
+      description: TaskForm.taskDescription,
+      assigned_to: assignedUsers.map((user) => user.id),
+      due_date: TaskForm.dueDate,
+      status: TaskForm.status,
+    };
+
+    if (editingTaskId) {
+      await editTask(editingTaskId, taskDetails);
+    } else {
+      await AddTask(taskDetails);
+    }
+    setEditingTaskId(null);
+    location.reload();
+  };
+
+  const editTask = async (taskid, updatedTaskDetails) => {
+    try {
+      const response = await fetch(
+        `${BaseURL}companies/${company?.id}/tasks/${taskid}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+          body: JSON.stringify(updatedTaskDetails),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error editing task");
+      }
+
+      const data = await response.json();
+      alert("Task updated successfully");
+      console.log("Updated task:", data);
+    } catch (error) {
+      console.error("Error editing task:", error);
+      alert("Failed to edit task");
+    }
+  };
+
+  const addComment = async (taskId, commentText) => {
+    try {
+      const response = await fetch(`${BaseURL}tasks/${taskId}/comments/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.access}`,
+        },
+        body: JSON.stringify({ text: commentText }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error adding comment");
+      }
+
+      const data = await response.json();
+      alert("Comment added successfully");
+      console.log("Added comment:", data);
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      alert("Failed to add comment");
+    }
+    location.reload();
+  };
+
+  const editComment = async (taskId, commentId, updatedCommentText) => {
+    try {
+      const response = await fetch(
+        `${BaseURL}tasks/${taskId}/comments/${commentId}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+          body: JSON.stringify({ text: updatedCommentText }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error editing comment");
+      }
+
+      const data = await response.json();
+      alert("Comment updated successfully");
+      console.log("Updated comment:", data);
+    } catch (error) {
+      console.error("Error editing comment:", error);
+      alert("Failed to edit comment");
+    }
+  };
+
+  const removeUserFromCompany = async (userid) => {
+    try {
+      const response = await fetch(
+        `${BaseURL}companies/${company.id}/users/${userid}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error removing user");
+      }
+
+      alert("User removed successfully");
+      console.log("Removed user ID:", userid);
+    } catch (error) {
+      console.error("Error removing user:", error);
+      alert("Failed to remove user");
+    } finally {
+      location.reload();
+    }
+  };
+
+  const DeleteTask = async (taskid) => {
+    try {
+      const response = await fetch(
+        `${BaseURL}companies/${company?.id}/tasks/${taskid}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
+      alert("Task deleted successfully");
+    } catch (error) {
+      alert(error);
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+    location.reload();
+  };
+  const updateTaskStatus = async (taskid, status) => {
+    try {
+      const response = await fetch(
+        `${BaseURL}companies/${company.id}/tasks/${taskid}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+          body: JSON.stringify({ status: status }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error updating task status");
+      }
+
+      const data = await response.json();
+      alert("Task status updated successfully");
+      console.log("Updated task status:", data);
+    } catch (error) {
+      console.error("Error updating task status:", error);
+      alert("Failed to update task status");
+    }
+    location.reload();
+  };
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch(
+          `${BaseURL}/tasks/assignedto/${userInfo.user.id}/`
+        );
+        if (response.status == 400) {
+          console.log("User has no tasks assigned to him");
+        } else if (!response.ok) {
+          throw new Error("Failed to fetch tasks");
+        }
+        const data = await response.json();
+        setTasks(data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  if (CompanyInfo?.admin !== userInfo.user.id) {
+    return (
+      <section className="TaskCompany">
+        {tasks.length > 0 ? (
+          tasks.map((task) => {
+            return (
+              <li key={task.id} className="Task">
+                <h3 className="TaskTitle">{task.title}</h3>
+                <p className="TaskDesc">{task.description}</p>
+                <select
+                  value={task.status}
+                  onChange={(e) => updateTaskStatus(task.id, e.target.value)}
+                >
+                  <option value="TODO">To do</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="DONE">Done</option>
+                </select>
+                <details className="AllComments">
+                  <summary className="CommentsLabel">Comments:</summary>
+                  <input
+                    type="text"
+                    placeholder="Add a comment"
+                    value={newCommentText}
+                    onChange={(e) => setNewCommentText(e.target.value)}
+                  />
+                  <button
+                    onClick={async () => {
+                      if (!newCommentText.trim()) return;
+                      await addComment(task.id, newCommentText);
+                      setNewCommentText("");
+                    }}
+                  >
+                    Add Comment
+                  </button>
+
+                  <article className="TaskComments">
+                    {task.comments.map((comment) => (
+                      <div key={comment.id} className="Comment">
+                        <h3 className="CommentUser">{comment.user}</h3>
+                        <p className="CommentContent">{comment.text}</p>
+                      </div>
+                    ))}
+                  </article>
+                </details>
+              </li>
+            );
+          })
+        ) : (
+          <p>No tasks assigned</p>
+        )}
+      </section>
+    );
+  } else if (CompanyInfo?.admin == userInfo.user.id && company) {
+    const [CompView, setCompView] = useState('company_users')
+    const handleView = (view) =>{
+      setCompView()
+    }
+    return (
+      <div className="container-dashboard">
+        <aside className="Sidebar">
+          <li className="NavItem">
+            <a href="/company-users" className="NavLink">
+              All Company Users
+            </a>
+          </li>
+          <li className="NavItem">
+            <a href="/tasks" className="NavLink">
+              All Tasks
+            </a>
+          </li>
+          <li className="NavItem">
+            <a href="/invite-user" className="NavLink">
+              Invite User
+            </a>
+          </li>
+          <li className="NavItem">
+            <a href="/add-task" className="NavLink">
+              Add Task
+            </a>
+          </li>
+        </aside>
+        <h2>Admin Dashboard</h2>
+        {company ? (
+          <main className="main-container">
+            <h1 className="CompanyName">{company.name}</h1>
+            <section className="CompanyUsers">
+              <h3 className="CompanyUsersTitle">Company Users:</h3>
+              {CompanyInfo?.users?.length > 0 ? (
+                CompanyInfo?.users.map((user) => {
+                  return (
+                    <li key={user.id} className="CompanyUser">
+                      <h2 className="CompanyUsername">{user.username}</h2>
+                      <button
+                        className="RemoveUserButton"
+                        onClick={async () => {
+                          const confirmRemoval = window.confirm(
+                            `Are you sure you want to remove ${user.username}?`
+                          );
+                          if (confirmRemoval) {
+                            await removeUserFromCompany(user.id);
+                          }
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  );
+                })
+              ) : (
+                <p>No users available</p>
+              )}
+            </section>
+            <section className="AddUser">
+              <span>Search Users to invite: </span>
+              <input
+                type="text"
+                placeholder="Search for users"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {FilteredUsers?.length > 0 ? (
+                <ul className="AllUsers">
+                  {FilteredUsers?.map((user) => (
+                    <li key={user.id} className="RandomUser">
+                      <span className="RanUsername">{user.username}</span>
+                      <button onClick={(e) => InviteUser(e)} value={user.id}>
+                        Invite
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No users found</p>
+              )}
+            </section>
+            <section className="TaskCompany">
+              {CompanyInfo?.tasks?.length > 0 ? (
+                CompanyInfo.tasks.map((task) => {
+                  return (
+                    <li key={task.id} className="Task">
+                      <h3 className="TaskTitle">{task.title}</h3>
+                      <p className="TaskDesc">{task.description}</p>
+                      <select
+                        value={task.status}
+                        onChange={(e) =>
+                          updateTaskStatus(task.id, e.target.value)
+                        }
+                      >
+                        <option value="TODO">To do</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="DONE">Done</option>
+                      </select>
+                      <button
+                        className="EditTaskButton"
+                        onClick={() => {
+                          setTaskForm({
+                            taskTitle: task.title,
+                            taskDescription: task.description,
+                            dueDate: task.due_date,
+                          });
+                          setEditingTaskId(task.id);
+                          const assignedUserObjects = task.assigned_to.map(
+                            (userId) =>
+                              CompanyUsers.find(
+                                (user) => user.id == userId
+                              ) || {
+                                id: userId,
+                                username: "Unknown",
+                              }
+                          );
+                          setAssignedUsers(assignedUserObjects);
+                        }}
+                      >
+                        Edit Task
+                      </button>
+                      <button
+                        className="DeleteTaskBtn"
+                        onClick={() => DeleteTask(task.id)}
+                      >
+                        Delete Task
+                      </button>
+                      <details className="AllComments">
+                        <summary className="CommentsLabel">Comments:</summary>
+                        <input
+                          type="text"
+                          placeholder="Add a comment"
+                          value={newCommentText}
+                          onChange={(e) => setNewCommentText(e.target.value)}
+                        />
+                        <button
+                          onClick={async () => {
+                            if (!newCommentText.trim()) return;
+                            await addComment(task.id, newCommentText);
+                            setNewCommentText("");
+                          }}
+                        >
+                          Add Comment
+                        </button>
+
+                        <article className="TaskComments">
+                          {task.comments.map((comment) => (
+                            <div key={comment.id} className="Comment">
+                              <h3 className="CommentUser">{comment.user}</h3>
+                              <p className="CommentContent">{comment.text}</p>
+                            </div>
+                          ))}
+                        </article>
+                      </details>
+                    </li>
+                  );
+                })
+              ) : (
+                <p>No tasks added</p>
+              )}
+            </section>
+            <section className="AddingCompanyTask">
+              <h3 className="AddTaskTitle">Add Task</h3>
+              <form onSubmit={handleFormSubmit}>
+                <input
+                  type="text"
+                  placeholder="Task Title"
+                  value={TaskForm.taskTitle}
+                  name="taskTitle"
+                  id="NewTaskTitle"
+                  onChange={handleChange}
+                />
+                <textarea
+                  placeholder="Task Description"
+                  value={TaskForm.taskDescription}
+                  name="taskDescription"
+                  onChange={handleChange}
+                  className="NewTaskDesc"
+                ></textarea>
+                <input
+                  type="date"
+                  value={TaskForm.dueDate}
+                  name="dueDate"
+                  className="NewTaskDueDate"
+                  onChange={handleChange}
+                />
+                <h4>Assign to Users</h4>
+                {CompanyUsers?.map((user) => (
+                  <div key={user.id}>
+                    <input
+                      type="checkbox"
+                      value={user.id}
+                      checked={assignedUsers.some((u) => u.id === user.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setAssignedUsers([...assignedUsers, user]);
+                        } else {
+                          setAssignedUsers(
+                            assignedUsers.filter((u) => u.id !== user.id)
+                          );
+                        }
+                      }}
+                    />
+
+                    {user.username}
+                  </div>
+                ))}
+                <input
+                  type="submit"
+                  value={editingTaskId ? "Update Task" : "Add Task"}
+                />
+              </form>
+            </section>
+          </main>
+        ) : (
+          <div>
+            <p>You are not part of any company.</p>
+            <Link to="/create-company">Create Company</Link>
+          </div>
+        )}
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <p>You are not part of any company.</p>
+        <Link to="/create-company">Create Company</Link>
+      </div>
+    );
+  }
+};
+
+export default AdminDashboard;
+
+// back up incase i screw up

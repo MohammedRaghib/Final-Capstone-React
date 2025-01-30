@@ -1,0 +1,29 @@
+.register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  padding-top: 30px;
+  border-radius: 8px;
+  text-align: center;
+}
+.reginsidecont {
+  box-shadow: 0 4px 8px rgb(187, 134, 252, 0.5);
+  padding: 20px;
+  width: 30%;
+  border-radius: 20px;
+}
+
+h1 {
+  color: var(--accent-color);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

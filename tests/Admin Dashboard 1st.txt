@@ -1,0 +1,49 @@
+// import React, { useState, useEffect } from "react";
+// import { Link } from "react-router-dom";
+
+// const AdminDashboard = ({ userInfo }) => {
+//   const [companies, setCompanies] = useState();
+//   const [loading, setLoading] = useState(true);
+//   const BaseURL = "http://127.0.0.1:8000/";
+
+//   useEffect(() => {
+//     const fetchCompanies = async () => {
+//       const response = await fetch(`${BaseURL}usercompanies/`, {
+//         headers: {
+//           Authorization: `Bearer ${userInfo.access}`,
+//         },
+//       });
+
+//       const data = await response.json();
+//       console.log(data);
+//       setCompanies(data.companies || []);
+//       setLoading(false);
+//     };
+
+//     fetchCompanies();
+//   }, []);
+
+//   if (loading) {
+//     return <p>Loading...</p>;
+//   }
+
+//   return (
+//     <div className="container-dashboard">
+//       <h2>Admin Dashboard</h2>
+//       {userInfo ? (
+//         <main className="main-container">
+//           <h1 className="CompanyName">{companies.name}</h1>
+//         </main>
+//       ) : (
+//         <div>
+//           <p>You are not part of any company.</p>
+//           <Link to="/create-company">Create Company</Link>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AdminDashboard;
+
+1. first version

@@ -1,0 +1,30 @@
+:root {
+  --background-color: #121212;
+  --primary-color: #1f1f1f;
+  --secondary-color: #292929;
+  --accent-color: #bb86fc;
+  --text-color: #e0e0e0;
+  --link-color: #03dac6;
+  --border-color: #333333;
+}
+
+.Navbar {
+  background-color: var(--primary-color);
+  padding: 1rem;
+}
+
+.Navitem {
+  list-style: none;
+  display: inline;
+  margin-right: 1rem;
+}
+
+.Navlink {
+  color: var(--link-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.Navlink:hover {
+  color: var(--accent-color);
+}

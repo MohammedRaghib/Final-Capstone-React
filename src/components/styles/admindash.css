@@ -1,0 +1,49 @@
+:root {
+  --background-color: #121212;
+  --primary-color: #1f1f1f;
+  --secondary-color: #292929;
+  --accent-color: #bb86fc;
+  --text-color: #e0e0e0;
+  --link-color: #03dac6;
+  --border-color: #ffffff;
+}
+.container-dashboard{
+  display: grid;
+  grid-template-columns: 200px auto;
+  gap: 20px;
+}
+.SideNav{
+  justify-self: left;
+}
+.Sidebar{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: top;
+  height: 100vh;
+  background-color: var(--secondary-color);
+  padding: 10px;
+}
+.SideNavItem{
+  margin: 10px;
+  background-color: var(--secondary-color);
+}
+.SideNavLink{
+  background-color: var(--secondary-color);
+}
+
+.CompanyName{
+  text-align: left;
+}
+.CompanyUserContOnly{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-between;
+  align-items: center;
+}
+.CompanyUser{
+  border: 2px var(--border-color) solid;
+  padding: 20px;
+  width: 100%;
+  border-radius: 20px;
+}
