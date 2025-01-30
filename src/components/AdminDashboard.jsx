@@ -574,7 +574,7 @@ const AdminDashboard = ({ userInfo }) => {
                 handleFormSubmit={handleFormSubmit}
                 TaskForm={TaskForm}
                 handleChange={handleChange}
-                CompanyUsers={CompanyUsers}
+                CompanyInfo={CompanyInfo}
                 assignedUsers={assignedUsers}
                 setAssignedUsers={setAssignedUsers}
                 editingTaskId={editingTaskId}

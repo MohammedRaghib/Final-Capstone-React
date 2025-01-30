@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './styles/createcomp.css'
+import "./styles/createcomp.css";
 
 const CreateCompany = ({ userInfo }) => {
   const [companyName, setCompanyName] = useState("");
@@ -21,11 +21,11 @@ const CreateCompany = ({ userInfo }) => {
         },
       });
       if (!response.ok) {
-        console.error('Error')
-    }
+        console.error("Error");
+      }
       const data = await response.json();
       console.log("Companies data:", data);
-      setCompany(data.companies || []);
+      setCompany(data.companies || {});
     } catch (error) {
       console.error("Error fetching companies:", error);
     } finally {
@@ -131,8 +131,14 @@ const CreateCompany = ({ userInfo }) => {
     } catch (error) {
       console.error("Error:", error);
     }
+    location.reload();
   };
-
+  const isEmpty = (obj) => {
+    if (obj == null) {
+      return true;
+    }
+    return Object.keys(obj).length === 0;
+  };
   useEffect(() => {
     fetchCompanies();
   }, [BaseURL, userInfo]);
@@ -156,7 +162,7 @@ const CreateCompany = ({ userInfo }) => {
         </div>
       </div>
     );
-  } else if (company) {
+  } else if (!isEmpty(company)) {
     return (
       <section className="ElseContainer">
         <p className="AlreadyInCompany">You are already joined in a company</p>
@@ -178,17 +184,32 @@ const CreateCompany = ({ userInfo }) => {
           <button type="submit">Create</button>
         </form>
         <section className="InvitesCont">
-          {notifications?.map((notification) => {
-            return (
+          {notifications.length > 0 ? (
+            notifications.map((notification) => (
               <div className="NotificationCont" key={notification.created_at}>
                 <p className="NotificationCompany">
-                  {notification?.company?.name} has invited you to join the company
+                  {notification?.company?.name} has invited you to join the
+                  company
                 </p>
-                <button onClick={()=> (acceptOrDeclineInvite(notification.company.id, 'POST'))}>Accept invite</button>
-                <button onClick={()=> (acceptOrDeclineInvite(notification.company.id, 'DELETE'))}>Decline invite</button>
+                <button
+                  onClick={() =>
+                    acceptOrDeclineInvite(notification.company.id, "POST")
+                  }
+                >
+                  Accept invite
+                </button>
+                <button
+                  onClick={() =>
+                    acceptOrDeclineInvite(notification.company.id, "DELETE")
+                  }
+                >
+                  Decline invite
+                </button>
               </div>
-            );
-          })}
+            ))
+          ) : (
+            <p className="NotificationCompany">No invites yet</p>
+          )}
         </section>
         {error && <p className="Error">{error}</p>}
       </div>

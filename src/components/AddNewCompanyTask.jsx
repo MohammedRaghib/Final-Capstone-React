@@ -4,7 +4,7 @@ const AddNewCompanyTask = ({
   handleFormSubmit,
   TaskForm,
   handleChange,
-  CompanyUsers,
+  CompanyInfo,
   assignedUsers,
   setAssignedUsers,
   editingTaskId,
@@ -34,7 +34,7 @@ const AddNewCompanyTask = ({
         />
         <h4>Assign to Users</h4>
         <aside className="AllUsersToAssign">
-          {CompanyUsers.map((user) => (
+          {CompanyInfo?.users?.map((user) => (
             <div key={user.id} className="CheckBoxUser">
               <input
                 type="checkbox"
