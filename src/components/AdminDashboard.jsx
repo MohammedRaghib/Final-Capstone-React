@@ -323,7 +323,8 @@ const AdminDashboard = ({ userInfo }) => {
       );
 
       if (!response.ok) {
-        throw new Error("Error removing user");
+        const data = await response.json();
+        console.error(data.detail);
       }
 
       alert("User removed successfully");
@@ -426,47 +427,55 @@ const AdminDashboard = ({ userInfo }) => {
           </nav>
         </aside>
         <section className="TaskCompany">
+          <h1 className="CompanyName">{company.name}</h1>
           {tasks.length > 0 ? (
             tasks.map((task) => {
               return (
                 <li key={task.id} className="Task">
-                  <h3 className="TaskTitle">{task.title}</h3>
-                  <p className="TaskDesc">{task.description}</p>
-                  <select
-                    value={task.status}
-                    onChange={(e) => updateTaskStatus(task.id, e.target.value)}
-                  >
-                    <option value="TODO">To do</option>
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="DONE">Done</option>
-                  </select>
-                  <details className="AllComments">
-                    <summary className="CommentsLabel">Comments:</summary>
-                    <input
-                      type="text"
-                      placeholder="Add a comment"
-                      value={newCommentText}
-                      onChange={(e) => setNewCommentText(e.target.value)}
-                    />
-                    <button
-                      onClick={async () => {
-                        if (!newCommentText.trim()) return;
-                        await addComment(task.id, newCommentText);
-                        setNewCommentText("");
-                      }}
+                  <div className="TaskCont">
+                    <h3 className="TaskTitle">{task.title}</h3>
+                    <p className="TaskDesc">{task.description}</p>
+                    <code className="TaskDueDate">
+                      Due date: {task.due_date}
+                    </code>
+                    <select
+                      value={task.status}
+                      onChange={(e) =>
+                        updateTaskStatus(task.id, e.target.value)
+                      }
                     >
-                      Add Comment
-                    </button>
+                      <option value="TODO">To do</option>
+                      <option value="IN_PROGRESS">In Progress</option>
+                      <option value="DONE">Done</option>
+                    </select>
+                    <details className="AllComments">
+                      <summary className="CommentsLabel">Comments:</summary>
+                      <input
+                        type="text"
+                        placeholder="Add a comment"
+                        value={newCommentText}
+                        onChange={(e) => setNewCommentText(e.target.value)}
+                      />
+                      <button
+                        onClick={async () => {
+                          if (!newCommentText.trim()) return;
+                          await addComment(task.id, newCommentText);
+                          setNewCommentText("");
+                        }}
+                      >
+                        Add Comment
+                      </button>
 
-                    <article className="TaskComments">
-                      {task.comments.map((comment) => (
-                        <div key={comment.id} className="Comment">
-                          <h3 className="CommentUser">{comment.user}</h3>
-                          <p className="CommentContent">{comment.text}</p>
-                        </div>
-                      ))}
-                    </article>
-                  </details>
+                      <article className="TaskComments">
+                        {task.comments.map((comment) => (
+                          <div key={comment.id} className="Comment">
+                            <h3 className="CommentUser">{comment.user}</h3>
+                            <p className="CommentContent">{comment.text}</p>
+                          </div>
+                        ))}
+                      </article>
+                    </details>
+                  </div>
                 </li>
               );
             })

@@ -12,7 +12,7 @@ const AddNewCompanyTask = ({
   return (
     <section className="AddingCompanyTask">
       <h3 className="AddTaskTitle">Add Task</h3>
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleFormSubmit} className="AddTaskForm">
         <input
           type="text"
           placeholder="Task Title"
@@ -33,23 +33,25 @@ const AddNewCompanyTask = ({
           onChange={handleChange}
         />
         <h4>Assign to Users</h4>
-        {CompanyUsers.map((user) => (
-          <div key={user.id}>
-            <input
-              type="checkbox"
-              value={user.id}
-              checked={assignedUsers.some((u) => u.id === user.id)}
-              onChange={(e) => {
-                setAssignedUsers(
-                  e.target.checked
-                    ? [...assignedUsers, user]
-                    : assignedUsers.filter((u) => u.id !== user.id)
-                );
-              }}
-            />
-            {user.username}
-          </div>
-        ))}
+        <aside className="AllUsersToAssign">
+          {CompanyUsers.map((user) => (
+            <div key={user.id} className="CheckBoxUser">
+              <input
+                type="checkbox"
+                value={user.id}
+                checked={assignedUsers.some((u) => u.id === user.id)}
+                onChange={(e) => {
+                  setAssignedUsers(
+                    e.target.checked
+                      ? [...assignedUsers, user]
+                      : assignedUsers.filter((u) => u.id !== user.id)
+                  );
+                }}
+              />
+              <span className="Assignee">{user.username}</span>
+            </div>
+          ))}
+        </aside>
         <input
           type="submit"
           value={editingTaskId ? "Update Task" : "Add Task"}

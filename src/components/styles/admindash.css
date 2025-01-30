@@ -1,3 +1,307 @@
+/* :root {
+  --background-color: #121212;
+  --primary-color: #1f1f1f;
+  --secondary-color: #292929;
+  --accent-color: #bb86fc;
+  --text-color: #e0e0e0;
+  --link-color: #03dac6;
+  --border-color: #ffffff;
+}
+.container-dashboard {
+  display: grid;
+  grid-template-columns: 200px auto;
+  gap: 20px;
+  height: 100%;
+}
+.SideNav {
+  justify-self: left;
+}
+.Sidebar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: top;
+  min-height: 100vh;
+  background-color: var(--secondary-color);
+  padding: 10px;
+}
+.SideNavItem {
+  margin: 10px;
+  background-color: var(--secondary-color);
+}
+.SideNavLink {
+  background-color: var(--secondary-color);
+}
+
+.CompanyName {
+  text-align: left;
+}
+
+.CompanyUserContOnly {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.CompanyUser {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 80%;
+  border: 2px var(--border-color) solid;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: var(--primary-color);
+}
+.CompanyUser button {
+  background-color: var(--accent-color);
+}
+.CompanyUser button:hover {
+  background-color: var(--link-color);
+}
+.TaskCont {
+  border: 2px solid var(--border-color);
+  padding: 10px;
+  background-color: var(--primary-color);
+  width: 90%;
+}
+.TaskCompany {
+  list-style-type: none;
+  padding: 0;
+}
+
+.TaskTitle {
+  color: var(--accent-color);
+}
+
+.TaskDesc {
+  color: var(--text-color);
+}
+
+.TaskDueDate {
+  color: var(--text-color);
+}
+
+.AllComments {
+  margin-top: 20px;
+}
+
+.CommentsLabel {
+  color: var(--accent-color);
+}
+
+.TaskComments {
+  background-color: var(--secondary-color);
+  padding: 10px;
+  border-radius: 10px;
+  width: 80%;
+}
+
+.Comment {
+  border: 1px solid var(--border-color);
+  width: 70%;
+  padding: 10px;
+  text-wrap: 1;
+  border-radius: 20px;
+}
+.AddComment {
+  width: 30%;
+  margin: 5px;
+}
+.CommentUser {
+  color: var(--link-color);
+  font-size: small;
+}
+
+.EditTaskButton,
+.DeleteTaskBtn {
+  margin: 5px;
+  background-color: var(--accent-color);
+}
+.EditTaskButton:hover,
+.DeleteTaskBtn:hover {
+  background-color: var(--link-color);
+}
+.select {
+  border: 2px solid var(--border-color);
+  color: var(--text-color);
+  background-color: var(--secondary-color);
+  padding: 10px;
+}
+
+.AddingCompanyTask {
+  background-color: var(--primary-color);
+  border: 2px var(--border-color) solid;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 10px;
+  color: var(--text-color);
+  width: 80%;
+}
+
+.AddTaskTitle {
+  color: var(--accent-color);
+}
+
+.AddTaskForm input[type="text"],
+.AddTaskForm textarea,
+.AddTaskForm input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px var(--border-color) solid;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.AddTaskForm input[type="text"]:focus,
+.AddTaskForm textarea:focus,
+.AddTaskForm input[type="date"]:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+h4 {
+  color: var(--accent-color);
+}
+
+.AddTaskForm div {
+  margin: 10px 0;
+}
+
+.AddTaskForm input[type="checkbox"] {
+  background-color: var(--secondary-color);
+}
+
+.AddTaskForm input[type="submit"] {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.AddTaskForm input[type="submit"]:hover {
+  background-color: var(--link-color);
+}
+.CheckBoxUser {
+  display: flex;
+  gap: 0;
+}
+.AllUsersToAssign {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: space-evenly;
+  gap: 20px;
+}
+.Assignee {
+  margin: 0;
+}
+
+.AddUser {
+  background-color: var(--primary-color);
+  border: 2px var(--border-color) solid;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 10px;
+  color: var(--text-color);
+  width: 90%;
+}
+
+.AddUser span {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.AddUser input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px var(--border-color) solid;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.AddUser input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.AllUsers {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.RandomUser {
+  background-color: var(--secondary-color);
+  border: 1px var(--border-color) solid;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+}
+
+.RanUsername {
+  color: var(--link-color);
+}
+.NoCompanyFoundContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20%;
+} */
+/* @media (max-width: 1024px) {
+  .container-dashboard {
+    grid-template-columns: 150px auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .Sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .CompanyUser,
+  .RandomUser {
+    width: 100%;
+  }
+
+  .AddTaskForm input[type="text"],
+  .AddTaskForm textarea,
+  .AddTaskForm input[type="date"],
+  .AddUser input[type="text"] {
+    width: 100%;
+  }
+
+  .TaskComments {
+    width: 100%;
+  }
+
+  .Comment {
+    width: 100%;
+  }
+
+  .AllUsersToAssign {
+    grid-template-columns: auto auto;
+  }
+} */
 :root {
   --background-color: #121212;
   --primary-color: #1f1f1f;
@@ -7,43 +311,314 @@
   --link-color: #03dac6;
   --border-color: #ffffff;
 }
-.container-dashboard{
+
+.container-dashboard {
   display: grid;
   grid-template-columns: 200px auto;
   gap: 20px;
+  min-height: 100vh;
 }
-.SideNav{
+
+.SideNav {
   justify-self: left;
 }
-.Sidebar{
+
+.Sidebar {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: top;
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--secondary-color);
   padding: 10px;
 }
-.SideNavItem{
+
+.SideNavItem {
   margin: 10px;
   background-color: var(--secondary-color);
 }
-.SideNavLink{
+
+.SideNavLink {
   background-color: var(--secondary-color);
 }
 
-.CompanyName{
+.CompanyName {
   text-align: left;
 }
-.CompanyUserContOnly{
+
+.CompanyUserContOnly {
   display: grid;
   grid-template-columns: auto auto auto;
-  justify-content: space-between;
+  gap: 20%;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
-.CompanyUser{
+
+.CompanyUser {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 80%;
   border: 2px var(--border-color) solid;
   padding: 20px;
-  width: 100%;
   border-radius: 20px;
+  background-color: var(--primary-color);
+  margin: 10px;
+}
+
+.CompanyUser button {
+  background-color: var(--accent-color);
+}
+
+.CompanyUser button:hover {
+  background-color: var(--link-color);
+}
+
+.TaskCont {
+  border: 2px solid var(--border-color);
+  padding: 10px;
+  background-color: var(--primary-color);
+  width: 90%;
+}
+
+.TaskCompany {
+  list-style-type: none;
+  padding: 0;
+}
+
+.TaskTitle {
+  color: var(--accent-color);
+}
+
+.TaskDesc {
+  color: var(--text-color);
+}
+
+.TaskDueDate {
+  color: var(--text-color);
+}
+
+.AllComments {
+  margin-top: 20px;
+}
+
+.CommentsLabel {
+  color: var(--accent-color);
+}
+
+.TaskComments {
+  background-color: var(--secondary-color);
+  padding: 10px;
+  border-radius: 10px;
+  width: 80%;
+}
+
+.Comment {
+  border: 1px solid var(--border-color);
+  width: 70%;
+  padding: 10px;
+  text-wrap: 1;
+  border-radius: 20px;
+}
+
+.AddComment {
+  width: 30%;
+  margin: 5px;
+}
+
+.CommentUser {
+  color: var(--link-color);
+  font-size: small;
+}
+
+.EditTaskButton,
+.DeleteTaskBtn {
+  margin: 5px;
+  background-color: var(--accent-color);
+}
+
+.EditTaskButton:hover,
+.DeleteTaskBtn:hover {
+  background-color: var(--link-color);
+}
+
+.select {
+  border: 2px solid var(--border-color);
+  color: var(--text-color);
+  background-color: var(--secondary-color);
+  padding: 10px;
+}
+
+.AddingCompanyTask {
+  background-color: var(--primary-color);
+  border: 2px var(--border-color) solid;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 10px;
+  color: var(--text-color);
+  width: 80%;
+}
+
+.AddTaskTitle {
+  color: var(--accent-color);
+}
+
+.AddTaskForm input[type="text"],
+.AddTaskForm textarea,
+.AddTaskForm input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px var(--border-color) solid;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.AddTaskForm input[type="text"]:focus,
+.AddTaskForm textarea:focus,
+.AddTaskForm input[type="date"]:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.AddTaskForm div {
+  margin: 10px 0;
+}
+
+.AddTaskForm input[type="checkbox"] {
+  background-color: var(--secondary-color);
+}
+
+.AddTaskForm input[type="submit"] {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.AddTaskForm input[type="submit"]:hover {
+  background-color: var(--link-color);
+}
+
+.CheckBoxUser {
+  display: flex;
+  gap: 0;
+}
+
+.AllUsersToAssign {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: space-evenly;
+  gap: 20px;
+}
+
+.Assignee {
+  margin: 0;
+}
+
+.AddUser {
+  background-color: var(--primary-color);
+  border: 2px var(--border-color) solid;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 10px;
+  color: var(--text-color);
+  width: 90%;
+}
+
+.AddUser span {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.AddUser input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px var(--border-color) solid;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.AddUser input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.AllUsers {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.RandomUser {
+  background-color: var(--secondary-color);
+  border: 1px var(--border-color) solid;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+}
+
+.RanUsername {
+  color: var(--link-color);
+}
+
+.NoCompanyFoundContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20%;
+}
+
+@media (max-width: 1024px) {
+  .container-dashboard {
+    grid-template-columns: 150px auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .Sidebar {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .CompanyUser, .RandomUser {
+    width: 100%;
+  }
+
+  .AddTaskForm input[type="text"],
+  .AddTaskForm textarea,
+  .AddTaskForm input[type="date"],
+  .AddUser input[type="text"] {
+    width: 100%;
+  }
+
+  .TaskComments {
+    width: 100%;
+  }
+
+  .Comment {
+    width: 100%;
+  }
+
+  .AllUsersToAssign {
+    grid-template-columns: auto auto;
+  }
 }

@@ -173,6 +173,19 @@ const CreateCompany = ({ userInfo }) => {
           />
           <button type="submit">Create</button>
         </form>
+        <section className="InvitesCont">
+          {notifications.map((notification) => {
+            return (
+              <div className="NotificationCont" key={notification.created_at}>
+                <p className="NotificationCompany">
+                  {notification.company.name} has invited you to join the company
+                </p>
+                <button onClick={()=> (acceptOrDeclineInvite(notification.company.id, 'POST'))}>Accept invite</button>
+                <button onClick={()=> (acceptOrDeclineInvite(notification.company.id, 'DELETE'))}>Decline invite</button>
+              </div>
+            );
+          })}
+        </section>
         {error && <p className="Error">{error}</p>}
       </div>
     );
