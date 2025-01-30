@@ -417,87 +417,102 @@ const AdminDashboard = ({ userInfo }) => {
   };
   if (CompanyInfo?.admin !== userInfo.user.id && company) {
     return (
-      <section className="TaskCompany">
-        {tasks.length > 0 ? (
-          tasks.map((task) => {
-            return (
-              <li key={task.id} className="Task">
-                <h3 className="TaskTitle">{task.title}</h3>
-                <p className="TaskDesc">{task.description}</p>
-                <select
-                  value={task.status}
-                  onChange={(e) => updateTaskStatus(task.id, e.target.value)}
-                >
-                  <option value="TODO">To do</option>
-                  <option value="IN_PROGRESS">In Progress</option>
-                  <option value="DONE">Done</option>
-                </select>
-                <details className="AllComments">
-                  <summary className="CommentsLabel">Comments:</summary>
-                  <input
-                    type="text"
-                    placeholder="Add a comment"
-                    value={newCommentText}
-                    onChange={(e) => setNewCommentText(e.target.value)}
-                  />
-                  <button
-                    onClick={async () => {
-                      if (!newCommentText.trim()) return;
-                      await addComment(task.id, newCommentText);
-                      setNewCommentText("");
-                    }}
+      <div className="container-dashboard">
+        <aside className="Sidebar">
+          <nav className="SideNav">
+            <li className="SideNavItem">
+              <button className="SideNavLink">All Tasks</button>
+            </li>
+          </nav>
+        </aside>
+        <section className="TaskCompany">
+          {tasks.length > 0 ? (
+            tasks.map((task) => {
+              return (
+                <li key={task.id} className="Task">
+                  <h3 className="TaskTitle">{task.title}</h3>
+                  <p className="TaskDesc">{task.description}</p>
+                  <select
+                    value={task.status}
+                    onChange={(e) => updateTaskStatus(task.id, e.target.value)}
                   >
-                    Add Comment
-                  </button>
+                    <option value="TODO">To do</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="DONE">Done</option>
+                  </select>
+                  <details className="AllComments">
+                    <summary className="CommentsLabel">Comments:</summary>
+                    <input
+                      type="text"
+                      placeholder="Add a comment"
+                      value={newCommentText}
+                      onChange={(e) => setNewCommentText(e.target.value)}
+                    />
+                    <button
+                      onClick={async () => {
+                        if (!newCommentText.trim()) return;
+                        await addComment(task.id, newCommentText);
+                        setNewCommentText("");
+                      }}
+                    >
+                      Add Comment
+                    </button>
 
-                  <article className="TaskComments">
-                    {task.comments.map((comment) => (
-                      <div key={comment.id} className="Comment">
-                        <h3 className="CommentUser">{comment.user}</h3>
-                        <p className="CommentContent">{comment.text}</p>
-                      </div>
-                    ))}
-                  </article>
-                </details>
-              </li>
-            );
-          })
-        ) : (
-          <p>No tasks assigned</p>
-        )}
-      </section>
+                    <article className="TaskComments">
+                      {task.comments.map((comment) => (
+                        <div key={comment.id} className="Comment">
+                          <h3 className="CommentUser">{comment.user}</h3>
+                          <p className="CommentContent">{comment.text}</p>
+                        </div>
+                      ))}
+                    </article>
+                  </details>
+                </li>
+              );
+            })
+          ) : (
+            <p>No tasks assigned</p>
+          )}
+        </section>
+      </div>
     );
   } else if (CompanyInfo?.admin == userInfo.user.id) {
     return (
       <div className="container-dashboard">
         <aside className="Sidebar">
           <nav className="SideNav">
-          <li className="SideNavItem">
-            <button
-              onClick={() => setCompView("company_users")}
-              className="SideNavLink"
-            >
-              All Company Users
-            </button>
-          </li>
-          <li className="SideNavItem">
-            <button
-              onClick={() => setCompView("all_tasks")}
-              className="SideNavLink"
-            >
-              All Tasks
-            </button>
-          </li>
-          <li className="SideNavItem">
-            <button onClick={() => setCompView("add_user")} className="SideNavLink">
-              Invite User
-            </button>
-          </li>
-          <li className="SideNavItem">
-            <button onClick={() => setCompView("add_task")} className="SideNavLink">
-              Add Task
-            </button>
-          </li>
+            <li className="SideNavItem">
+              <button
+                onClick={() => setCompView("company_users")}
+                className="SideNavLink"
+              >
+                All Company Users
+              </button>
+            </li>
+            <li className="SideNavItem">
+              <button
+                onClick={() => setCompView("all_tasks")}
+                className="SideNavLink"
+              >
+                All Tasks
+              </button>
+            </li>
+            <li className="SideNavItem">
+              <button
+                onClick={() => setCompView("add_user")}
+                className="SideNavLink"
+              >
+                Invite User
+              </button>
+            </li>
+            <li className="SideNavItem">
+              <button
+                onClick={() => setCompView("add_task")}
+                className="SideNavLink"
+              >
+                Add Task
+              </button>
+            </li>
           </nav>
         </aside>
         {company ? (
