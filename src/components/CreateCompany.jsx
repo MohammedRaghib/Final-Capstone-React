@@ -20,6 +20,9 @@ const CreateCompany = ({ userInfo }) => {
           Authorization: `Bearer ${userInfo.access}`,
         },
       });
+      if (!response.ok) {
+        console.error('Error')
+    }
       const data = await response.json();
       console.log("Companies data:", data);
       setCompany(data.companies || []);
@@ -153,7 +156,7 @@ const CreateCompany = ({ userInfo }) => {
         </div>
       </div>
     );
-  } else if (!company) {
+  } else if (company) {
     return (
       <section className="ElseContainer">
         <p className="AlreadyInCompany">You are already joined in a company</p>
@@ -175,11 +178,11 @@ const CreateCompany = ({ userInfo }) => {
           <button type="submit">Create</button>
         </form>
         <section className="InvitesCont">
-          {notifications.map((notification) => {
+          {notifications?.map((notification) => {
             return (
               <div className="NotificationCont" key={notification.created_at}>
                 <p className="NotificationCompany">
-                  {notification.company.name} has invited you to join the company
+                  {notification?.company?.name} has invited you to join the company
                 </p>
                 <button onClick={()=> (acceptOrDeclineInvite(notification.company.id, 'POST'))}>Accept invite</button>
                 <button onClick={()=> (acceptOrDeclineInvite(notification.company.id, 'DELETE'))}>Decline invite</button>

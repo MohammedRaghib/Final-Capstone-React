@@ -38,7 +38,7 @@ const AdminDashboard = ({ userInfo }) => {
         });
         const data = await response.json();
         console.log("Companies data:", data);
-        setCompanies(data.companies || []);
+        setCompanies(data.companies || {});
       } catch (error) {
         console.error("Error fetching companies:", error);
       } finally {
@@ -173,12 +173,17 @@ const AdminDashboard = ({ userInfo }) => {
   };
 
   const filterusers = () => {
-    if (!CompanyInfo || !CompanyInfo.noncompanyusers) {
+    if (
+      !CompanyInfo ||
+      !CompanyInfo.noncompanyusers ||
+      !Array.isArray(AllUsers) ||
+      !AllUsers
+    ) {
       return [];
     }
-    const filtered_users = AllUsers.filter((ranuser) =>
+    const filtered_users = AllUsers ? AllUsers.filter((ranuser) =>
       CompanyInfo.noncompanyusers.some((user) => user.id == ranuser.id)
-    );
+    ): []
 
     setFilteredUsers(filtered_users);
   };
@@ -192,9 +197,9 @@ const AdminDashboard = ({ userInfo }) => {
       return [];
     }
 
-    const filtered_users = AllUsers.filter((ranuser) =>
+    const filtered_users = AllUsers? AllUsers.filter((ranuser) =>
       CompanyInfo.users.some((user) => user.id === ranuser.id)
-    );
+    ): []
     SetCompanyUsers(filtered_users);
   };
 
@@ -396,8 +401,8 @@ const AdminDashboard = ({ userInfo }) => {
         const response = await fetch(
           `${BaseURL}tasks/assignedto/${userInfo.user.id}/`
         );
-        if (response.status == 400) {
-          console.log("User has no tasks assigned to him");
+        if (response.status == 204) {
+          return console.log("User has no tasks assigned to him");
         } else if (!response.ok) {
           throw new Error("Failed to fetch tasks");
         }
@@ -416,7 +421,13 @@ const AdminDashboard = ({ userInfo }) => {
   const handleView = (view) => {
     setCompView();
   };
-  if (CompanyInfo?.admin !== userInfo.user.id && company) {
+  const isEmpty = (obj) => {
+    if (obj == null) {
+      return true;
+    }
+    return Object.keys(obj).length === 0;
+  };
+  if (CompanyInfo?.admin !== userInfo.user.id && !isEmpty(company)) {
     return (
       <div className="container-dashboard">
         <aside className="Sidebar">

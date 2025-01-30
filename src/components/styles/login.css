@@ -1,4 +1,14 @@
-.register-container {
+:root {
+  --background-color: #121212;
+  --primary-color: #1f1f1f;
+  --secondary-color: #292929;
+  --accent-color: #bb86fc;
+  --text-color: #e0e0e0;
+  --link-color: #03dac6;
+  --border-color: #333333;
+}
+
+.login-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -8,7 +18,8 @@
   border-radius: 8px;
   text-align: center;
 }
-.reginsidecont {
+
+.logininsidecont{
   box-shadow: 0 4px 8px rgb(187, 134, 252, 0.5);
   padding: 20px;
   width: 30%;
@@ -26,4 +37,31 @@ form {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+input, textarea {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 80%;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--accent-color);
+}
+
+p {
+  color: var(--text-color);
 }
