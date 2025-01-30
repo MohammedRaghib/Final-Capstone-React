@@ -573,12 +573,12 @@ h4 {
   color: var(--link-color);
 }
 
-.NoCompanyFoundContainer {
+.ElseContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20%;
+  margin-top: 10%;
 }
 
 @media (max-width: 1024px) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import './styles/createcomp.css'
 
 const CreateCompany = ({ userInfo }) => {
   const [companyName, setCompanyName] = useState("");
@@ -154,7 +155,7 @@ const CreateCompany = ({ userInfo }) => {
     );
   } else if (!company) {
     return (
-      <section className="AlreadyInCompanyCont">
+      <section className="ElseContainer">
         <p className="AlreadyInCompany">You are already joined in a company</p>
         <a href="/all-dashboard">Back to company dashboard</a>
       </section>

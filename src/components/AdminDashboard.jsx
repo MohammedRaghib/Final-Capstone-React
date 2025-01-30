@@ -571,7 +571,7 @@ const AdminDashboard = ({ userInfo }) => {
             )}
           </main>
         ) : (
-          <div className="NoCompanyFoundContainer">
+          <div className="ElseContainer">
             <p>You are not part of any company.</p>
             <Link to="/create-company">Create Company</Link>
           </div>
@@ -580,7 +580,7 @@ const AdminDashboard = ({ userInfo }) => {
     );
   } else {
     return (
-      <div className="NoCompanyFoundContainer">
+      <div className="ElseContainer">
         <p>You are not part of any company.</p>
         <Link to="/create-company">Create Company</Link>
       </div>
