@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./styles/admindash.css";
+import React, { useEffect, useState } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import AllCompanyUsers from "./AllCompanyUsers";
 import AddNewCompanyUser from "./AddNewCompanyUser";
 import AllCompanyTasks from "./AllCompanyTasks";
 import AddNewCompanyTask from "./AddNewCompanyTask";
 
-const AdminDashboard = ({ userInfo }) => {
-  const [company, setCompanies] = useState();
+function OneCompanyDetails({ userInfo }) {
+  const location = useLocation();
+  const company = location.state;
+  const CompanyInfo = company.company;
+  const [CompView, setCompView] = useState("CompanyInfo_users");
   const [loading, setLoading] = useState(true);
-  const [companyInfoFetched, setCompanyInfoFetched] = useState(false);
   const BaseURL = "http://127.0.0.1:8000/";
   const [searchQuery, setSearchQuery] = useState("");
   const [AllUsers, setAllUsers] = useState([]);
-  const [CompanyInfo, setCompanyInfo] = useState({});
   const [FilteredUsers, setFilteredUsers] = useState([]);
   const [CompanyUsers, SetCompanyUsers] = useState([]);
   const [FetchCount, setFetchCount] = useState(0);
@@ -27,54 +27,7 @@ const AdminDashboard = ({ userInfo }) => {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [newCommentText, setNewCommentText] = useState("");
   const [tasks, setTasks] = useState([]);
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      try {
-        const response = await fetch(`${BaseURL}usercompanies/`, {
-          headers: {
-            Authorization: `Bearer ${userInfo.access}`,
-          },
-        });
-        const data = await response.json();
-        console.log("Companies data:", data);
-        setCompanies(data.companies || {});
-      } catch (error) {
-        console.error("Error fetching companies:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCompanies();
-  }, []);
-
-  useEffect(() => {
-    const fetchCompanyInfo = async () => {
-      if (company && !companyInfoFetched) {
-        const firstCompany = company;
-        if (firstCompany.id) {
-          try {
-            const response = await fetch(
-              `${BaseURL}companies/${firstCompany.id}/`,
-              {
-                headers: {
-                  Authorization: `Bearer ${userInfo.access}`,
-                },
-              }
-            );
-            const data = await response.json();
-            setCompanyInfo(data);
-            setCompanyInfoFetched(true);
-            console.log("CompanyInfo:", data);
-          } catch (error) {
-            console.error("Error fetching company info:", error);
-          }
-        }
-      }
-    };
-    fetchCompanyInfo();
-  }, [company, companyInfoFetched, userInfo]);
+  const navigate = useNavigate();
 
   const fetchUsers = async (userInfo, searchQuery = "") => {
     const endpoint = `${BaseURL}api/users/`;
@@ -128,7 +81,10 @@ const AdminDashboard = ({ userInfo }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userInfo.access}`,
         },
-        body: JSON.stringify({ message: "Invite", company_id: company.id }),
+        body: JSON.stringify({
+          message: "Invite",
+          CompanyInfo_id: CompanyInfo.id,
+        }),
       });
 
       if (!response.ok) {
@@ -143,13 +99,15 @@ const AdminDashboard = ({ userInfo }) => {
       console.error(error);
     } finally {
       setLoading(false);
+      navigate("/all-dashboard");
     }
   };
+
   const AddTask = async (taskDetails) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `${BaseURL}companies/${company?.id}/tasks/`,
+        `${BaseURL}companies/${CompanyInfo?.id}/tasks/`,
         {
           method: "POST",
           headers: {
@@ -170,6 +128,8 @@ const AdminDashboard = ({ userInfo }) => {
       setLoading(false);
       alert("Error creating task");
       console.error("Error:", error);
+    } finally {
+      navigate("/all-dashboard");
     }
   };
 
@@ -182,30 +142,17 @@ const AdminDashboard = ({ userInfo }) => {
     ) {
       return [];
     }
-    const filtered_users = AllUsers ? AllUsers.filter((ranuser) =>
-      CompanyInfo.noncompanyusers.some((user) => user.id == ranuser.id)
-    ): []
+    const filtered_users = AllUsers
+      ? AllUsers.filter((ranuser) =>
+          CompanyInfo.noncompanyusers.some((user) => user.id == ranuser.id)
+        )
+      : [];
 
     setFilteredUsers(filtered_users);
   };
 
   useEffect(() => {
     filterusers();
-  }, [CompanyInfo, AllUsers]);
-
-  const companyusers = () => {
-    if (!CompanyInfo || !CompanyInfo.users) {
-      return [];
-    }
-
-    const filtered_users = AllUsers? AllUsers.filter((ranuser) =>
-      CompanyInfo.users.some((user) => user.id === ranuser.id)
-    ): []
-    SetCompanyUsers(filtered_users);
-  };
-
-  useEffect(() => {
-    companyusers();
   }, [CompanyInfo, AllUsers]);
 
   const handleChange = (e) => {
@@ -239,7 +186,7 @@ const AdminDashboard = ({ userInfo }) => {
   const editTask = async (taskid, updatedTaskDetails) => {
     try {
       const response = await fetch(
-        `${BaseURL}companies/${company?.id}/tasks/${taskid}/`,
+        `${BaseURL}companies/${CompanyInfo?.id}/tasks/${taskid}/`,
         {
           method: "PUT",
           headers: {
@@ -261,6 +208,7 @@ const AdminDashboard = ({ userInfo }) => {
       console.error("Error editing task:", error);
       alert("Failed to edit task");
     }
+    navigate("/all-dashboard");
   };
 
   const addComment = async (taskId, commentText) => {
@@ -285,7 +233,7 @@ const AdminDashboard = ({ userInfo }) => {
       console.error("Error adding comment:", error);
       alert("Failed to add comment");
     }
-    location.reload();
+    navigate("/all-dashboard");
   };
 
   const editComment = async (taskId, commentId, updatedCommentText) => {
@@ -318,7 +266,7 @@ const AdminDashboard = ({ userInfo }) => {
   const removeUserFromCompany = async (userid) => {
     try {
       const response = await fetch(
-        `${BaseURL}company/${company?.id}/users/${userid}/`,
+        `${BaseURL}CompanyInfo/${CompanyInfo?.id}/users/${userid}/`,
         {
           method: "DELETE",
           headers: {
@@ -339,14 +287,14 @@ const AdminDashboard = ({ userInfo }) => {
       console.error("Error removing user:", error);
       alert("Failed to remove user");
     } finally {
-      location.reload();
+      navigate("/all-dashboard");
     }
   };
 
   const DeleteTask = async (taskid) => {
     try {
       const response = await fetch(
-        `${BaseURL}companies/${company?.id}/tasks/${taskid}/`,
+        `${BaseURL}companies/${CompanyInfo?.id}/tasks/${taskid}/`,
         {
           method: "DELETE",
           headers: {
@@ -366,12 +314,13 @@ const AdminDashboard = ({ userInfo }) => {
     } finally {
       setLoading(false);
     }
-    location.reload();
+    navigate("/all-dashboard");
   };
+
   const updateTaskStatus = async (taskid, status) => {
     try {
       const response = await fetch(
-        `${BaseURL}companies/${company.id}/tasks/${taskid}/`,
+        `${BaseURL}companies/${CompanyInfo?.id}/tasks/${taskid}/`,
         {
           method: "PUT",
           headers: {
@@ -393,7 +342,7 @@ const AdminDashboard = ({ userInfo }) => {
       console.error("Error updating task status:", error);
       alert("Failed to update task status");
     }
-    location.reload();
+    navigate("/all-dashboard");
   };
 
   useEffect(() => {
@@ -418,96 +367,31 @@ const AdminDashboard = ({ userInfo }) => {
 
     fetchTasks();
   }, []);
-  const [CompView, setCompView] = useState("company_users");
-  const handleView = (view) => {
-    setCompView(view);
-  };
+
   const isEmpty = (obj) => {
     if (obj == null) {
       return true;
     }
     return Object.keys(obj).length === 0;
   };
-  if(userInfo?.user?.id === 1){
-    return <p>Hello Overall admin</p>
-  }
-  if (CompanyInfo?.admin !== userInfo.user.id && !isEmpty(company)) {
+  const handleView = (view) => {
+    setCompView(view);
+  };
+  if (!CompanyInfo) {
     return (
-      <div className="container-dashboard">
-        <aside className="Sidebar">
-          <nav className="SideNav">
-            <li className="SideNavItem">
-              <button className="SideNavLink">All Tasks</button>
-            </li>
-          </nav>
-        </aside>
-        <section className="TaskCompany">
-          <h1 className="CompanyName">{company.name}</h1>
-          {tasks.length > 0 ? (
-            tasks.map((task) => {
-              return (
-                <li key={task.id} className="Task">
-                  <div className="TaskCont">
-                    <h3 className="TaskTitle">{task.title}</h3>
-                    <p className="TaskDesc">{task.description}</p>
-                    <code className="TaskDueDate">
-                      Due date: {task.due_date}
-                    </code>
-                    <select
-                      value={task.status}
-                      onChange={(e) =>
-                        updateTaskStatus(task.id, e.target.value)
-                      }
-                    >
-                      <option value="TODO">To do</option>
-                      <option value="IN_PROGRESS">In Progress</option>
-                      <option value="DONE">Done</option>
-                    </select>
-                    <details className="AllComments">
-                      <summary className="CommentsLabel">Comments:</summary>
-                      <input
-                        type="text"
-                        placeholder="Add a comment"
-                        value={newCommentText}
-                        onChange={(e) => setNewCommentText(e.target.value)}
-                      />
-                      <button
-                        onClick={async () => {
-                          if (!newCommentText.trim()) return;
-                          await addComment(task.id, newCommentText);
-                          setNewCommentText("");
-                        }}
-                      >
-                        Add Comment
-                      </button>
-
-                      <article className="TaskComments">
-                        {task.comments.map((comment) => (
-                          <div key={comment.id} className="Comment">
-                            <h3 className="CommentUser">{comment.user}</h3>
-                            <p className="CommentContent">{comment.text}</p>
-                          </div>
-                        ))}
-                      </article>
-                    </details>
-                  </div>
-                </li>
-              );
-            })
-          ) : (
-            <p>No tasks assigned</p>
-          )}
-        </section>
+      <div className="ElseContainer">
+        <p>No CompanyInfo details fetched, go to the dashboard to find one.</p>
+        <Link to="/all-dashboard">Dashboard</Link>
       </div>
     );
-  } else if (CompanyInfo?.admin == userInfo.user.id) {
+  } else {
     return (
       <div className="container-dashboard">
         <aside className="Sidebar">
           <nav className="SideNav">
             <li className="SideNavItem">
               <button
-                onClick={() => setCompView("company_users")}
+                onClick={() => setCompView("CompanyInfo_users")}
                 className="SideNavLink"
               >
                 All Company Users
@@ -539,10 +423,10 @@ const AdminDashboard = ({ userInfo }) => {
             </li>
           </nav>
         </aside>
-        {company ? (
-          <main className="main-container">
-            <h1 className="CompanyName">{company.name}</h1>
-            {CompView === "company_users" && (
+        {CompanyInfo ? (
+          <main className="OneCompanyDetailActionComp">
+            <h1 className="CompanyName">{CompanyInfo?.name}</h1>
+            {CompView === "CompanyInfo_users" && (
               <AllCompanyUsers
                 CompanyInfo={CompanyInfo}
                 CompanyUsers={CompanyUsers}
@@ -586,21 +470,14 @@ const AdminDashboard = ({ userInfo }) => {
             )}
           </main>
         ) : (
-          <div className="ElseContainer">
-            <p>You are not part of any company.</p>
-            <Link to="/create-company">Create Company</Link>
+          <div>
+            <p>Hello</p>
+            <Link to="/all-dashboard">Back to Dashboard</Link>
           </div>
         )}
       </div>
     );
-  } else {
-    return (
-      <div className="ElseContainer">
-        <p>You are not part of any company.</p>
-        <Link to="/create-company">Create Company</Link>
-      </div>
-    );
   }
-};
+}
 
-export default AdminDashboard;
+export default OneCompanyDetails;

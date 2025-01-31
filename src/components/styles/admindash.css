@@ -325,9 +325,9 @@ h4 {
 
 .Sidebar {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: top;
+  flex-direction: column;
+  /* justify-content: flex-start; */
+  align-items: center;
   min-height: 100vh;
   background-color: var(--secondary-color);
   padding: 10px;

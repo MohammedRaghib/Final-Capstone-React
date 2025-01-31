@@ -5,8 +5,10 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import AdminDashboard from "./components/AdminDashboard";
 import CreateCompany from "./components/CreateCompany";
-import Homepage from "./components/HomePage";
+import Homepage from "./components/Homepage";
 import Nav from "./components/Nav";
+import OverallAdmin from "./components/OverallAdmin";
+import OneCompanyDetails from "./components/OneCompanyDetails";
 
 const App = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -33,12 +35,17 @@ const App = () => {
             path="/all-dashboard"
             element={
               userInfo ? (
-                <AdminDashboard userInfo={userInfo} />
+                userInfo.user.id === 1 ? (
+                  <OverallAdmin userInfo={userInfo}/>
+                ) : (
+                  <AdminDashboard userInfo={userInfo} />
+                )
               ) : (
                 <Login setUserInfo={setUserInfo} />
               )
             }
           />
+
           <Route
             path="/create-company"
             element={
@@ -49,6 +56,21 @@ const App = () => {
               )
             }
           />
+          <Route
+            path="/company"
+            element={
+              userInfo ? (
+                userInfo.user.id === 1 ? (
+                  <OneCompanyDetails userInfo={userInfo}/>
+                ) : (
+                  <CreateCompany userInfo={userInfo} />
+                )
+              ) : (
+                <Login setUserInfo={setUserInfo} />
+              )
+            }
+          />
+
         </Routes>
       </Router>
     </>

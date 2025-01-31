@@ -123,3 +123,10 @@ a:hover {
     transform: translateX(100%);
   }
 }
+
+.HomepageCont{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
