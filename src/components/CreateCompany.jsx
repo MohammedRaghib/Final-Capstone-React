@@ -97,7 +97,7 @@ const CreateCompany = ({ userInfo }) => {
 
       const data = await response.json();
       if (response.status === 201) {
-        navigate("/admin-dashboard");
+        navigate("/all-dashboard");
       } else {
         setError(data.detail);
       }
@@ -162,7 +162,7 @@ const CreateCompany = ({ userInfo }) => {
         </div>
       </div>
     );
-  } else if (!isEmpty(company)) {
+  } else if (!isEmpty(company) && !userInfo?.user?.is_superuser) {
     return (
       <section className="ElseContainer">
         <p className="AlreadyInCompany">You are already joined in a company</p>
@@ -184,6 +184,7 @@ const CreateCompany = ({ userInfo }) => {
           <button type="submit">Create</button>
         </form>
         <section className="InvitesCont">
+          <h3 className="InvitesHead">Invites</h3>
           {notifications.length > 0 ? (
             notifications.map((notification) => (
               <div className="NotificationCont" key={notification.created_at}>

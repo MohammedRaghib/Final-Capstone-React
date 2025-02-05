@@ -1,0 +1,31 @@
+:root {
+  --background-color: #121212;
+  --primary-color: #1f1f1f;
+  --secondary-color: #292929;
+  --accent-color: #bb86fc;
+  --text-color: #e0e0e0;
+  --link-color: #03dac6;
+  --border-color: #ffffff;
+}
+
+.HomepageCont {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+}
+
+.HomepageCont h1 {
+  color: var(--accent-color);
+}
+
+.HomepageCont nav a {
+  color: var(--link-color);
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.HomepageCont nav a:hover {
+  text-decoration: underline;
+}

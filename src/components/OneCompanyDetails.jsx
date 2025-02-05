@@ -4,6 +4,7 @@ import AllCompanyUsers from "./AllCompanyUsers";
 import AddNewCompanyUser from "./AddNewCompanyUser";
 import AllCompanyTasks from "./AllCompanyTasks";
 import AddNewCompanyTask from "./AddNewCompanyTask";
+import AllCompanyNotifications from "./AllCompanyNotifications";
 
 function OneCompanyDetails({ userInfo }) {
   const location = useLocation();
@@ -83,7 +84,7 @@ function OneCompanyDetails({ userInfo }) {
         },
         body: JSON.stringify({
           message: "Invite",
-          CompanyInfo_id: CompanyInfo.id,
+          company_id: CompanyInfo.id,
         }),
       });
 
@@ -147,8 +148,14 @@ function OneCompanyDetails({ userInfo }) {
           CompanyInfo.noncompanyusers.some((user) => user.id == ranuser.id)
         )
       : [];
+    const invite_filtered_users = filtered_users
+      ? filtered_users.filter((ranuser) =>
+          !CompanyInfo.invited_users.some((user) => user == ranuser.id)
+        )
+      : [];
 
-    setFilteredUsers(filtered_users);
+    setFilteredUsers(invite_filtered_users);
+    // setFilteredUsers(filtered_users);
   };
 
   useEffect(() => {
@@ -180,7 +187,6 @@ function OneCompanyDetails({ userInfo }) {
       await AddTask(taskDetails);
     }
     setEditingTaskId(null);
-    location.reload();
   };
 
   const editTask = async (taskid, updatedTaskDetails) => {
@@ -266,7 +272,7 @@ function OneCompanyDetails({ userInfo }) {
   const removeUserFromCompany = async (userid) => {
     try {
       const response = await fetch(
-        `${BaseURL}CompanyInfo/${CompanyInfo?.id}/users/${userid}/`,
+        `${BaseURL}company/${CompanyInfo?.id}/users/${userid}/`,
         {
           method: "DELETE",
           headers: {
@@ -316,7 +322,32 @@ function OneCompanyDetails({ userInfo }) {
     }
     navigate("/all-dashboard");
   };
-
+  const delNotification = (userid, notificationId) => {
+    fetch(`${BaseURL}/notifications/${userid}/${notificationId}/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo?.access}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 204) {
+          console.log("Notification deleted");
+        } else if (response.status === 404) {
+          return response.json().then((data) => {
+            console.log(data.detail);
+          });
+        } else {
+          return response.json().then((data) => {
+            console.log(data.detail);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    navigate("/all-dashboard");
+  };
   const updateTaskStatus = async (taskid, status) => {
     try {
       const response = await fetch(
@@ -407,6 +438,14 @@ function OneCompanyDetails({ userInfo }) {
             </li>
             <li className="SideNavItem">
               <button
+                onClick={() => setCompView("notifications")}
+                className="SideNavLink"
+              >
+                All Notifications
+              </button>
+            </li>
+            <li className="SideNavItem">
+              <button
                 onClick={() => setCompView("add_user")}
                 className="SideNavLink"
               >
@@ -466,6 +505,12 @@ function OneCompanyDetails({ userInfo }) {
                 assignedUsers={assignedUsers}
                 setAssignedUsers={setAssignedUsers}
                 editingTaskId={editingTaskId}
+              />
+            )}
+            {CompView === "notifications" && (
+              <AllCompanyNotifications
+                CompanyInfo={CompanyInfo}
+                delNotification={delNotification}
               />
             )}
           </main>

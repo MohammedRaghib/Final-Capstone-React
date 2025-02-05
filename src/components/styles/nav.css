@@ -9,8 +9,21 @@
 }
 
 .Navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: var(--primary-color);
   padding: 1rem;
+}
+.ProfAndDashboard {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background-color: var(--primary-color);
+}
+.ProfAndDashboard img {
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
 }
 
 .Navitem {

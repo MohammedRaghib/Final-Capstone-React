@@ -1,5 +1,5 @@
 import React from "react";
-import  './styles/nav.css';
+import "./styles/nav.css";
 
 function Nav({ userInfo, setUserInfo }) {
   const BaseURL = "http://127.0.0.1:8000/";
@@ -11,25 +11,41 @@ function Nav({ userInfo, setUserInfo }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({refresh: userInfo.refresh}),
+        body: JSON.stringify({ refresh: userInfo.refresh }),
       });
       setUserInfo(null);
       const remove_info = localStorage.removeItem("userInfo");
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   };
   return (
     <>
       <nav className="Navbar">
+        <section className="ProfAndDashboard">
+          <li className="Navitem">
+            <a className="Navlink" href="/">
+              <img
+                alt="Profile Picture"
+                src={
+                  userInfo?.user.profile_picture
+                    ? `${BaseURL}${userInfo.user.profile_picture}`
+                    : "https://generated-images.perchance.org/image/66918572605344d4ac4da8f35993ec5b3a291a8adaa6e97667567baff6c27336.jpeg"
+                }
+                width={50}
+                height={50}
+              />
+            </a>
+          </li>
+          <li className="Navitem">
+            <a className="Navlink" href="/all-dashboard">
+              Dashboard
+            </a>
+          </li>
+        </section>
         <li className="Navitem">
           <a className="Navlink" onClick={handleLogOut}>
             Logout
-          </a>
-        </li>
-        <li className="Navitem">
-          <a className="Navlink" href="/all-dashboard">
-            Dashboard
           </a>
         </li>
       </nav>

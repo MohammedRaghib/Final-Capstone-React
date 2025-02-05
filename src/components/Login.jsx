@@ -24,7 +24,7 @@ const Login = ({ setUserInfo, userInfo }) => {
       if (response.status === 200) {
         setUserInfo(data);
         localStorage.setItem("userInfo", JSON.stringify(data));
-        navigate("/create-company");
+        navigate("/");
       } else {
         setError(data.detail);
       }

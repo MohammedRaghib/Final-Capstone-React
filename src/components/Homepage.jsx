@@ -7,7 +7,7 @@ const Homepage = ({ userInfo }) => {
             {userInfo ? (
                 <div className='HomepageCont'>
                     <h1>Welcome back, {userInfo.user.username}!</h1>
-                    <p>Explore your dashboard or manage your companies.</p>
+                    <p>Explore your dashboard or manage your company.</p>
                     <nav>
                         <Link to="/all-dashboard">Go to Admin Dashboard</Link>
                     </nav>

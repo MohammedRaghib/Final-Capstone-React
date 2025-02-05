@@ -83,6 +83,10 @@
   margin-top: 10px;
 }
 
+.InvitesHead,
+.NotificationCompany {
+  text-align: center;
+}
 @media (max-width: 1024px) {
   .CreateCompanyCont {
     width: 80%;

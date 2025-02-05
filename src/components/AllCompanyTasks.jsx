@@ -74,7 +74,7 @@ const AllCompanyTasks = ({
                   onChange={(e) => setNewCommentText(e.target.value)}
                   className="AddComment"
                 />
-                <button onClick={() => addComment(task.id, newCommentText)}>
+                <button onClick={() => addComment(task.id, newCommentText)} className="AddCommentBtn">
                   Add Comment
                 </button>
                 <article className="TaskComments">

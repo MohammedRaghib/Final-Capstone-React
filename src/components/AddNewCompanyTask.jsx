@@ -34,23 +34,27 @@ const AddNewCompanyTask = ({
         />
         <h4>Assign to Users</h4>
         <aside className="AllUsersToAssign">
-          {CompanyInfo?.users?.map((user) => (
-            <div key={user.id} className="CheckBoxUser">
-              <input
-                type="checkbox"
-                value={user.id}
-                checked={assignedUsers.some((u) => u.id === user.id)}
-                onChange={(e) => {
-                  setAssignedUsers(
-                    e.target.checked
-                      ? [...assignedUsers, user]
-                      : assignedUsers.filter((u) => u.id !== user.id)
-                  );
-                }}
-              />
-              <span className="Assignee">{user.username}</span>
-            </div>
-          ))}
+          {CompanyInfo?.users?.length > 0 ? (
+            CompanyInfo?.users?.map((user) => (
+              <div key={user.id} className="CheckBoxUser">
+                <input
+                  type="checkbox"
+                  value={user.id}
+                  checked={assignedUsers.some((u) => u.id === user.id)}
+                  onChange={(e) => {
+                    setAssignedUsers(
+                      e.target.checked
+                        ? [...assignedUsers, user]
+                        : assignedUsers.filter((u) => u.id !== user.id)
+                    );
+                  }}
+                />
+                <span className="Assignee">{user.username}</span>
+              </div>
+            ))
+          ) : (
+            <p>No users in company</p>
+          )}
         </aside>
         <input
           type="submit"

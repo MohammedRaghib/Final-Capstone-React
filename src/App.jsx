@@ -9,6 +9,7 @@ import Homepage from "./components/Homepage";
 import Nav from "./components/Nav";
 import OverallAdmin from "./components/OverallAdmin";
 import OneCompanyDetails from "./components/OneCompanyDetails";
+import Profile from "./components/Profile";
 
 const App = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -22,21 +23,42 @@ const App = () => {
       {userInfo && <Nav userInfo={userInfo} setUserInfo={setUserInfo} />}
       <Router>
         <Routes>
-          <Route path="/" element={<Homepage userInfo={userInfo} />} />
+          <Route
+            path="/"
+            element={
+              userInfo ? (
+                <Profile userInfo={userInfo} setUserInfo={setUserInfo} />
+              ) : (
+                <Login setUserInfo={setUserInfo} userInfo={userInfo} />
+              )
+            }
+          />
           <Route
             path="/login"
-            element={<Login setUserInfo={setUserInfo} userInfo={userInfo} />}
+            element={
+              !userInfo ? (
+                <Login setUserInfo={setUserInfo} userInfo={userInfo} />
+              ) : (
+                <AdminDashboard userInfo={userInfo} />
+              )
+            }
           />
           <Route
             path="/register"
-            element={<Register setUserInfo={setUserInfo} />}
+            element={
+              !userInfo ? (
+                <Register setUserInfo={setUserInfo} />
+              ) : (
+                <AdminDashboard userInfo={userInfo} />
+              )
+            }
           />
           <Route
             path="/all-dashboard"
             element={
               userInfo ? (
-                userInfo.user.id === 1 ? (
-                  <OverallAdmin userInfo={userInfo}/>
+                userInfo.user.is_superuser ? (
+                  <OverallAdmin userInfo={userInfo} />
                 ) : (
                   <AdminDashboard userInfo={userInfo} />
                 )
@@ -61,7 +83,7 @@ const App = () => {
             element={
               userInfo ? (
                 userInfo.user.id === 1 ? (
-                  <OneCompanyDetails userInfo={userInfo}/>
+                  <OneCompanyDetails userInfo={userInfo} />
                 ) : (
                   <CreateCompany userInfo={userInfo} />
                 )
@@ -70,7 +92,16 @@ const App = () => {
               )
             }
           />
-
+          <Route
+            path="/profile"
+            element={
+              userInfo ? (
+                <Profile userInfo={userInfo} />
+              ) : (
+                <Login setUserInfo={setUserInfo} />
+              )
+            }
+          />
         </Routes>
       </Router>
     </>
