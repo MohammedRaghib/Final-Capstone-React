@@ -6,7 +6,7 @@ import AllCompanyTasks from "./AllCompanyTasks";
 import AddNewCompanyTask from "./AddNewCompanyTask";
 import AllCompanyNotifications from "./AllCompanyNotifications";
 
-function OneCompanyDetails({ userInfo }) {
+function OneCompanyDetails({ userInfo, setUserInfo }) {
   const location = useLocation();
   const company = location.state;
   const CompanyInfo = company.company;
@@ -423,7 +423,49 @@ function OneCompanyDetails({ userInfo }) {
     } catch (error) {
       console.error("Error deleting company:", error);
     }
-    navigate("/all-dashboard");
+    if (!userInfo?.user?.personal) {
+      navigate("/all-dashboard");
+    } else {
+      deletePersonalSystem();
+    }
+  };
+
+  const deletePersonalSystem = async () => {
+    if (!userInfo?.user?.id) {
+      console.error("User ID is required");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${BaseURL}/create-personal/${userInfo?.user?.id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Success:", data.detail);
+        const info = JSON.parse(localStorage.getItem("userInfo"));
+        info.user.personal = false;
+        const savedinfo = localStorage.setItem(
+          "userInfo",
+          JSON.stringify(info)
+        );
+        setUserInfo(info);
+      } else {
+        console.error("Error:", data.detail);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      alert(`Error: ${response.detail}`);
+    }
+    navigate("/create-company");
   };
   if (!CompanyInfo) {
     return (

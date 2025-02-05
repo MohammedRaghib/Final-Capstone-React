@@ -79,8 +79,8 @@ function Profile({ userInfo, setUserInfo }) {
             src={
               userInfo?.user.profile_picture
                 ? `${BaseURL}${userInfo.user.profile_picture}`
-                : "https://generated-images.perchance.org/image/66918572605344d4ac4da8f35993ec5b3a291a8adaa6e97667567baff6c27336.jpeg"
-            }
+                : "https://generated-images.perchance.org/image/379575b777c491789998467c91d4740cb9f75efb04e66b4568dbae5e9b982762.jpeg"
+              }
           />
           <h2>
             <b>Username:</b> {userInfo?.user?.username}

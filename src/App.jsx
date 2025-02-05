@@ -39,7 +39,7 @@ const App = () => {
               !userInfo ? (
                 <Login setUserInfo={setUserInfo} userInfo={userInfo} />
               ) : (
-                <AdminDashboard userInfo={userInfo} />
+                <AdminDashboard userInfo={userInfo}  setUserInfo={setUserInfo} />
               )
             }
           />
@@ -49,7 +49,7 @@ const App = () => {
               !userInfo ? (
                 <Register setUserInfo={setUserInfo} />
               ) : (
-                <AdminDashboard userInfo={userInfo} />
+                <AdminDashboard userInfo={userInfo}  setUserInfo={setUserInfo} />
               )
             }
           />
@@ -60,7 +60,7 @@ const App = () => {
                 userInfo.user.is_superuser ? (
                   <OverallAdmin userInfo={userInfo} />
                 ) : (
-                  <AdminDashboard userInfo={userInfo} />
+                  <AdminDashboard userInfo={userInfo}  setUserInfo={setUserInfo} />
                 )
               ) : (
                 <Login setUserInfo={setUserInfo} />
@@ -82,8 +82,8 @@ const App = () => {
             path="/company"
             element={
               userInfo ? (
-                userInfo.user.id === 1 ? (
-                  <OneCompanyDetails userInfo={userInfo} />
+                userInfo.user.is_superuser ? (
+                  <OneCompanyDetails userInfo={userInfo} setUserInfo={setUserInfo}/>
                 ) : (
                   <CreateCompany userInfo={userInfo} />
                 )

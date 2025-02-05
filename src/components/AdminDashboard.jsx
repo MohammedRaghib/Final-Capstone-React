@@ -7,7 +7,7 @@ import AllCompanyTasks from "./AllCompanyTasks";
 import AddNewCompanyTask from "./AddNewCompanyTask";
 import AllCompanyNotifications from "./AllCompanyNotifications";
 
-const AdminDashboard = ({ userInfo }) => {
+const AdminDashboard = ({ userInfo, setUserInfo }) => {
   const [company, setCompanies] = useState();
   const [loading, setLoading] = useState(true);
   const [companyInfoFetched, setCompanyInfoFetched] = useState(false);
@@ -131,7 +131,11 @@ const AdminDashboard = ({ userInfo }) => {
     } catch (error) {
       console.error("Error deleting company:", error);
     }
-    navigate("/create-company");
+    if (!userInfo?.user?.personal) {
+      navigate("/create-company");
+    } else {
+      deletePersonalSystem();
+    }
   };
   const InviteUser = async (e) => {
     const userid = e.target.value;
@@ -206,6 +210,43 @@ const AdminDashboard = ({ userInfo }) => {
       console.error("Error fetching notifications:", error);
       console.error(response.detail);
     }
+  };
+  const deletePersonalSystem = async () => {
+    if (!userInfo?.user?.id) {
+      console.error("User ID is required");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${BaseURL}/create-personal/${userInfo?.user?.id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Success:", data.detail);
+        const info = JSON.parse(localStorage.getItem("userInfo"));
+        info.user.personal = false;
+        const savedinfo = localStorage.setItem(
+          "userInfo",
+          JSON.stringify(info)
+        );
+        setUserInfo(info);
+      } else {
+        console.error("Error:", data.detail);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      alert(`Error: ${response.detail}`);
+    }
+    navigate("/create-company");
   };
 
   const filterusers = () => {
@@ -381,6 +422,7 @@ const AdminDashboard = ({ userInfo }) => {
 
       alert("User removed successfully");
       console.log("Removed user ID:", userid);
+      navigate("/create-company");
     } catch (error) {
       console.error("Error removing user:", error);
       alert("Failed to remove user");
@@ -514,7 +556,14 @@ const AdminDashboard = ({ userInfo }) => {
       notifications.style.display = "block";
     }
   };
-
+  if (isEmpty(company) && !userInfo?.user?.is_superuser) {
+    return (
+      <div className="ElseContainer">
+        <p>You are not part of any company.</p>
+        <Link to="/create-company">Create Company</Link>
+      </div>
+    );
+  }
   if (userInfo?.user?.is_superuser) {
     return (
       <div className="ElseContainer">
@@ -522,8 +571,7 @@ const AdminDashboard = ({ userInfo }) => {
         <Link to="/all-dashboard">Super admin dashboard</Link>
       </div>
     );
-  }
-  if (CompanyInfo?.admin !== userInfo.user.id && !isEmpty(company)) {
+  } else if (CompanyInfo?.admin !== userInfo.user.id && !isEmpty(company)) {
     return (
       <div className="container-dashboard">
         <aside className="Sidebar">
