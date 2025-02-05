@@ -42,6 +42,11 @@ function Nav({ userInfo, setUserInfo }) {
               Dashboard
             </a>
           </li>
+          {userInfo?.user?.is_superuser && (<li className="Navitem">
+            <a className="Navlink" href="/create-company">
+              Create Company
+            </a>
+          </li>)}
         </section>
         <li className="Navitem">
           <a className="Navlink" onClick={handleLogOut}>

@@ -35,6 +35,7 @@ function OverallAdmin({ userInfo }) {
           <tr>
             <th className="CompanyNameTh">Company Name</th>
             <th className="CompanyAdminTh">Admin</th>
+            <th className="CompanyPersonalTh">Personal</th>
             <th className="CompanyUserCountTh">User Count</th>
             <th className="CompanyInvitedTh">Invited Users Count</th>
           </tr>
@@ -43,11 +44,12 @@ function OverallAdmin({ userInfo }) {
           {companies.map((company) => (
             <tr key={company.id}>
               <td className="CompanyNameTd">
-                <Link to={`/company`} state={{ company }}>
+                <Link to={`/company`} state={{ 'company':company, "personal":company.personal }}>
                   {company.name}
                 </Link>
               </td>
               <td className="CompanyAdminTd">{company.admin_name}</td>
+              <td className="CompanyPersonalTd">{company.personal ? 'Personal' : 'Not personal'}</td>
               <td className="CompanyUserCountTd">{company.users.length}</td>
               <td className="CompanyInvitedTd">{company.invited_users.length}</td>
             </tr>

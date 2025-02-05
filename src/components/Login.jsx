@@ -63,6 +63,7 @@ const Login = ({ setUserInfo, userInfo }) => {
             <button type="submit">Login</button>
           </form>
           {error && <p>{error}</p>}
+          <p>Dont have an account? <a href="/register">Register</a></p>
         </div>
       )}
       </main>

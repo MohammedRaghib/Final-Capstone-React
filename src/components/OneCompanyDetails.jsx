@@ -10,7 +10,8 @@ function OneCompanyDetails({ userInfo }) {
   const location = useLocation();
   const company = location.state;
   const CompanyInfo = company.company;
-  const [CompView, setCompView] = useState("CompanyInfo_users");
+  const personal = company.personal;
+  const [CompView, setCompView] = useState("notifications");
   const [loading, setLoading] = useState(true);
   const BaseURL = "http://127.0.0.1:8000/";
   const [searchQuery, setSearchQuery] = useState("");
@@ -149,8 +150,9 @@ function OneCompanyDetails({ userInfo }) {
         )
       : [];
     const invite_filtered_users = filtered_users
-      ? filtered_users.filter((ranuser) =>
-          !CompanyInfo.invited_users.some((user) => user == ranuser.id)
+      ? filtered_users.filter(
+          (ranuser) =>
+            !CompanyInfo.invited_users.some((user) => user == ranuser.id)
         )
       : [];
 
@@ -408,6 +410,21 @@ function OneCompanyDetails({ userInfo }) {
   const handleView = (view) => {
     setCompView(view);
   };
+
+  const DeleteCompany = async () => {
+    try {
+      const response = await fetch(`${BaseURL}companies/${CompanyInfo?.id}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${userInfo.access}`,
+        },
+      });
+      const data = await response.json();
+    } catch (error) {
+      console.error("Error deleting company:", error);
+    }
+    navigate("/all-dashboard");
+  };
   if (!CompanyInfo) {
     return (
       <div className="ElseContainer">
@@ -420,14 +437,16 @@ function OneCompanyDetails({ userInfo }) {
       <div className="container-dashboard">
         <aside className="Sidebar">
           <nav className="SideNav">
-            <li className="SideNavItem">
-              <button
-                onClick={() => setCompView("CompanyInfo_users")}
-                className="SideNavLink"
-              >
-                All Company Users
-              </button>
-            </li>
+            {!personal && (
+              <li className="SideNavItem">
+                <button
+                  onClick={() => setCompView("CompanyInfo_users")}
+                  className="SideNavLink"
+                >
+                  All Company Users
+                </button>
+              </li>
+            )}
             <li className="SideNavItem">
               <button
                 onClick={() => setCompView("all_tasks")}
@@ -444,14 +463,16 @@ function OneCompanyDetails({ userInfo }) {
                 All Notifications
               </button>
             </li>
-            <li className="SideNavItem">
-              <button
-                onClick={() => setCompView("add_user")}
-                className="SideNavLink"
-              >
-                Invite User
-              </button>
-            </li>
+            {!personal && (
+              <li className="SideNavItem">
+                <button
+                  onClick={() => setCompView("add_user")}
+                  className="SideNavLink"
+                >
+                  Invite User
+                </button>
+              </li>
+            )}
             <li className="SideNavItem">
               <button
                 onClick={() => setCompView("add_task")}
@@ -464,15 +485,30 @@ function OneCompanyDetails({ userInfo }) {
         </aside>
         {CompanyInfo ? (
           <main className="OneCompanyDetailActionComp">
-            <h1 className="CompanyName">{CompanyInfo?.name}</h1>
-            {CompView === "CompanyInfo_users" && (
+            <aside className="NameAndLeave">
+              <h1 className="CompanyName">{CompanyInfo.name}</h1>
+              <button
+                className="RemoveUserButton"
+                onClick={async () => {
+                  const confirmRemoval = window.confirm(
+                    `Are you sure you want to delete ${CompanyInfo.name}?`
+                  );
+                  if (confirmRemoval) {
+                    await DeleteCompany();
+                  }
+                }}
+              >
+                Delete Company
+              </button>
+            </aside>
+            {!personal && CompView === "CompanyInfo_users" && (
               <AllCompanyUsers
                 CompanyInfo={CompanyInfo}
                 CompanyUsers={CompanyUsers}
                 removeUserFromCompany={removeUserFromCompany}
               />
             )}
-            {CompView === "add_user" && (
+            {!personal && CompView === "add_user" && (
               <AddNewCompanyUser
                 InviteUser={InviteUser}
                 searchQuery={searchQuery}

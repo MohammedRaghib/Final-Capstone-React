@@ -99,6 +99,7 @@ const Register = ({ setUserInfo }) => {
           <button type="submit">Register</button>
         </form>
         {error && <p>{error}</p>}
+        <p>Already have an account? <a href="/login">Login</a></p>
       </main>
     </div>
   );

@@ -8,11 +8,11 @@
   --border-color: rgb(51, 51, 51);
 }
 
-.OverallAdminDashboardCont{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.OverallAdminDashboardCont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .AdminTitle {
@@ -49,6 +49,7 @@ a {
 
 .CompanyNameTh,
 .CompanyAdminTh,
+.CompanyPersonalTh,
 .CompanyUserCountTh,
 .CompanyInvitedTh {
   border: 2px var(--border-color) solid;
@@ -56,8 +57,21 @@ a {
 
 .CompanyNameTd,
 .CompanyAdminTd,
+.CompanyPersonalTd,
 .CompanyUserCountTd,
 .CompanyInvitedTd {
   border: 2px var(--border-color) solid;
   padding: 20px;
+}
+@media (max-width: 760px) {
+  .AllCompaniesTable {
+    width: 90%;
+  }
+  .TableHeader th,
+  .TableBody td {
+    padding: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: left;
+  }
 }

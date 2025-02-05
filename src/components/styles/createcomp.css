@@ -42,6 +42,7 @@
   border-radius: 5px;
   cursor: pointer;
   width: 80%;
+  margin: 5px;
 }
 
 .CreateCompanyForm button:hover {
@@ -86,6 +87,9 @@
 .InvitesHead,
 .NotificationCompany {
   text-align: center;
+}
+.Abbriviation{
+  text-decoration: none;
 }
 @media (max-width: 1024px) {
   .CreateCompanyCont {

@@ -464,7 +464,7 @@ const AdminDashboard = ({ userInfo }) => {
 
     fetchTasks();
   }, []);
-  const [CompView, setCompView] = useState("company_users");
+  const [CompView, setCompView] = useState("notifications");
   const handleView = (view) => {
     setCompView(view);
   };

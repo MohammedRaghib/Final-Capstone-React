@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles/createcomp.css";
 
-const CreateCompany = ({ userInfo }) => {
+const CreateCompany = ({ userInfo, setUserInfo }) => {
   const [companyName, setCompanyName] = useState("");
   const [notifications, setNotifications] = useState([]);
   const [company, setCompany] = useState();
   const [loading, setLoading] = useState(true);
   const [companyInfo, setCompanyInfo] = useState({});
+  const [Personal, setPersonal] = useState(false);
   const [companyInfoFetched, setCompanyInfoFetched] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -83,6 +84,36 @@ const CreateCompany = ({ userInfo }) => {
     }
   };
 
+  const createPersonalSystem = async () => {
+    if (!userInfo?.user?.id) {
+      console.error("User ID is required");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BaseURL}/create-personal/${userInfo?.user?.id}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Success:", data.detail);
+        const info = JSON.parse(localStorage.getItem('userInfo'))
+        info.user.personal = true
+        const savedinfo = localStorage.setItem('userInfo', JSON.stringify(info))
+        setUserInfo(info)
+      } else {
+        console.error("Error:", data.detail);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      alert(`Error: ${response.detail}`);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -100,6 +131,9 @@ const CreateCompany = ({ userInfo }) => {
         navigate("/all-dashboard");
       } else {
         setError(data.detail);
+      }
+      if (Personal) {
+        const personal_sys = await createPersonalSystem();
       }
     } catch (err) {
       setError("An error occurred");
@@ -139,6 +173,12 @@ const CreateCompany = ({ userInfo }) => {
     }
     return Object.keys(obj).length === 0;
   };
+  const handlePersonalSubmit = (e) => {
+    e.preventDefault();
+    setPersonal(true);
+    setTimeout(() => document.getElementById("companyForm").requestSubmit(), 0);
+  };
+
   useEffect(() => {
     fetchCompanies();
   }, [BaseURL, userInfo]);
@@ -173,7 +213,11 @@ const CreateCompany = ({ userInfo }) => {
     return (
       <div className="CreateCompanyCont">
         <h2 className="CreateCompanyTitle">Create Company</h2>
-        <form onSubmit={handleSubmit} className="CreateCompanyForm">
+        <form
+          onSubmit={handleSubmit}
+          className="CreateCompanyForm"
+          id="companyForm"
+        >
           <input
             type="text"
             placeholder="Company Name"
@@ -182,6 +226,11 @@ const CreateCompany = ({ userInfo }) => {
             required
           />
           <button type="submit">Create</button>
+          <button onClick={handlePersonalSubmit}>
+            <abbr title="You will not be able to invite other users" className="Abbriviation">
+              Create Personal Company
+            </abbr>
+          </button>
         </form>
         <section className="InvitesCont">
           <h3 className="InvitesHead">Invites</h3>

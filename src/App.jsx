@@ -72,7 +72,7 @@ const App = () => {
             path="/create-company"
             element={
               userInfo ? (
-                <CreateCompany userInfo={userInfo} />
+                <CreateCompany userInfo={userInfo} setUserInfo={setUserInfo} />
               ) : (
                 <Login setUserInfo={setUserInfo} />
               )
