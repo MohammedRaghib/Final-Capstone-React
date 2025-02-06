@@ -10,7 +10,7 @@ function OneCompanyDetails({ userInfo, setUserInfo }) {
   const location = useLocation();
   const company = location.state;
   const CompanyInfo = company.company;
-  const personal = company.personal;
+  const personal = CompanyInfo.personal;
   const [CompView, setCompView] = useState("notifications");
   const [loading, setLoading] = useState(true);
   const BaseURL = "http://127.0.0.1:8000/";
@@ -423,50 +423,9 @@ function OneCompanyDetails({ userInfo, setUserInfo }) {
     } catch (error) {
       console.error("Error deleting company:", error);
     }
-    if (!userInfo?.user?.personal) {
-      navigate("/all-dashboard");
-    } else {
-      deletePersonalSystem();
-    }
+    navigate('/all-dashboard')
   };
 
-  const deletePersonalSystem = async () => {
-    if (!userInfo?.user?.id) {
-      console.error("User ID is required");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `${BaseURL}/create-personal/${userInfo?.user?.id}/`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log("Success:", data.detail);
-        const info = JSON.parse(localStorage.getItem("userInfo"));
-        info.user.personal = false;
-        const savedinfo = localStorage.setItem(
-          "userInfo",
-          JSON.stringify(info)
-        );
-        setUserInfo(info);
-      } else {
-        console.error("Error:", data.detail);
-      }
-    } catch (error) {
-      console.error("Network error:", error);
-      alert(`Error: ${response.detail}`);
-    }
-    navigate("/create-company");
-  };
   if (!CompanyInfo) {
     return (
       <div className="ElseContainer">

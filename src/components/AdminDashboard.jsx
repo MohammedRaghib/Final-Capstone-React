@@ -131,11 +131,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
     } catch (error) {
       console.error("Error deleting company:", error);
     }
-    if (!userInfo?.user?.personal) {
-      navigate("/create-company");
-    } else {
-      deletePersonalSystem();
-    }
+    navigate("/create-company");
   };
   const InviteUser = async (e) => {
     const userid = e.target.value;
@@ -707,7 +703,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
     );
   } else if (
     CompanyInfo?.admin == userInfo.user.id &&
-    !userInfo?.user?.personal
+    !CompanyInfo.personal
   ) {
     return (
       <div className="container-dashboard">
@@ -835,7 +831,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
         )}
       </div>
     );
-  } else if (userInfo?.user?.personal) {
+  } else if (CompanyInfo.personal) {
     return (
       <div className="container-dashboard">
         <aside className="Sidebar">

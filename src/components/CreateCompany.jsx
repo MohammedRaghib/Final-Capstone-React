@@ -91,21 +91,23 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
     }
 
     try {
-      const response = await fetch(`${BaseURL}/create-personal/${userInfo?.user?.id}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${BaseURL}/create-personal/${userInfo?.user?.id}/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+          body: JSON.stringify({ name: companyName }),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Success:", data.detail);
-        const info = JSON.parse(localStorage.getItem('userInfo'))
-        info.user.personal = true
-        const savedinfo = localStorage.setItem('userInfo', JSON.stringify(info))
-        setUserInfo(info)
+        console.log("Success:", data);
+        navigate("/all-dashboard");
       } else {
         console.error("Error:", data.detail);
       }
@@ -116,27 +118,29 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch(`${BaseURL}companies/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.access}`,
-        },
-        body: JSON.stringify({ name: companyName }),
-      });
+    const name = e.nativeEvent.submitter.name;
+    if (name === "Personal") {
+      await createPersonalSystem();
+    } else {
+      try {
+        const response = await fetch(`${BaseURL}companies/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+          body: JSON.stringify({ name: companyName }),
+        });
 
-      const data = await response.json();
-      if (response.status === 201) {
-        navigate("/all-dashboard");
-      } else {
-        setError(data.detail);
+        const data = await response.json();
+        if (response.status === 201) {
+          navigate("/all-dashboard");
+        } else {
+          setError(data.detail);
+        }
+      } catch (err) {
+        setError("An error occurred");
       }
-      if (Personal) {
-        const personal_sys = await createPersonalSystem();
-      }
-    } catch (err) {
-      setError("An error occurred");
     }
   };
   const acceptOrDeclineInvite = async (companyid, method) => {
@@ -225,9 +229,14 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
             onChange={(e) => setCompanyName(e.target.value)}
             required
           />
-          <button type="submit">Create</button>
-          <button onClick={handlePersonalSubmit}>
-            <abbr title="You will not be able to invite other users" className="Abbriviation">
+          <button type="submit" name="Public">
+            Create
+          </button>
+          <button name="Personal" type="submit">
+            <abbr
+              title="You will not be able to invite other users"
+              className="Abbriviation"
+            >
               Create Personal Company
             </abbr>
           </button>
