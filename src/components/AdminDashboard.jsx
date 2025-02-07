@@ -41,7 +41,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
         });
         const data = await response.json();
         console.log("Companies data:", data);
-        setCompanies(data.companies || {});
+        setCompanies(data.company || {});
       } catch (error) {
         console.error("Error fetching companies:", error);
       } finally {
@@ -66,7 +66,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
               }
             );
             const data = await response.json();
-            setCompanyInfo(data);
+            setCompanyInfo(data.company || {});
             setCompanyInfoFetched(true);
             console.log("CompanyInfo:", data);
           } catch (error) {
@@ -206,43 +206,6 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
       console.error("Error fetching notifications:", error);
       console.error(response.detail);
     }
-  };
-  const deletePersonalSystem = async () => {
-    if (!userInfo?.user?.id) {
-      console.error("User ID is required");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `${BaseURL}/create-personal/${userInfo?.user?.id}/`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log("Success:", data.detail);
-        const info = JSON.parse(localStorage.getItem("userInfo"));
-        info.user.personal = false;
-        const savedinfo = localStorage.setItem(
-          "userInfo",
-          JSON.stringify(info)
-        );
-        setUserInfo(info);
-      } else {
-        console.error("Error:", data.detail);
-      }
-    } catch (error) {
-      console.error("Network error:", error);
-      alert(`Error: ${response.detail}`);
-    }
-    navigate("/create-company");
   };
 
   const filterusers = () => {
@@ -502,7 +465,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
 
     fetchTasks();
   }, []);
-  const [CompView, setCompView] = useState("notifications");
+  const [CompView, setCompView] = useState("all_tasks");
   const handleView = (view) => {
     setCompView(view);
   };
@@ -702,8 +665,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
       </div>
     );
   } else if (
-    CompanyInfo?.admin == userInfo.user.id &&
-    !CompanyInfo.personal
+    CompanyInfo?.admin == userInfo.user.id
   ) {
     return (
       <div className="container-dashboard">
@@ -831,102 +793,8 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
         )}
       </div>
     );
-  } else if (CompanyInfo.personal) {
-    return (
-      <div className="container-dashboard">
-        <aside className="Sidebar">
-          <nav className="SideNav">
-            <li className="SideNavItem">
-              <button
-                onClick={() => setCompView("all_tasks")}
-                className="SideNavLink"
-              >
-                All Tasks
-              </button>
-            </li>
-            {/* tasks */}
-            <li className="SideNavItem">
-              <button
-                onClick={() => setCompView("notifications")}
-                className="SideNavLink"
-              >
-                All Notifications
-              </button>
-            </li>
-            {/* notifications */}
-            {/* invite users */}
-            <li className="SideNavItem">
-              <button
-                onClick={() => setCompView("add_task")}
-                className="SideNavLink"
-              >
-                Add Task
-              </button>
-            </li>
-            {/* add task */}
-          </nav>
-        </aside>
-        {company ? (
-          <main className="main-container">
-            <aside className="NameAndLeave">
-              <h1 className="CompanyName">{company.name}</h1>
-              <button
-                className="RemoveUserButton"
-                onClick={async () => {
-                  const confirmRemoval = window.confirm(
-                    `Are you sure you want to delete ${company.name}?`
-                  );
-                  if (confirmRemoval) {
-                    await DeleteCompany();
-                  }
-                }}
-              >
-                Delete Company
-              </button>
-            </aside>
-            {CompView === "all_tasks" && (
-              <AllCompanyTasks
-                CompanyInfo={CompanyInfo}
-                updateTaskStatus={updateTaskStatus}
-                DeleteTask={DeleteTask}
-                addComment={addComment}
-                newCommentText={newCommentText}
-                setNewCommentText={setNewCommentText}
-                CompanyUsers={CompanyUsers}
-                setTaskForm={setTaskForm}
-                setEditingTaskId={setEditingTaskId}
-                assignedUsers={assignedUsers}
-                setAssignedUsers={setAssignedUsers}
-                handleView={handleView}
-              />
-            )}
-            {CompView === "add_task" && (
-              <AddNewCompanyTask
-                handleFormSubmit={handleFormSubmit}
-                TaskForm={TaskForm}
-                handleChange={handleChange}
-                CompanyInfo={CompanyInfo}
-                assignedUsers={assignedUsers}
-                setAssignedUsers={setAssignedUsers}
-                editingTaskId={editingTaskId}
-              />
-            )}
-            {CompView === "notifications" && (
-              <AllCompanyNotifications
-                CompanyInfo={CompanyInfo}
-                delNotification={delNotification}
-              />
-            )}
-          </main>
-        ) : (
-          <div className="ElseContainer">
-            <p>You are not part of any company.</p>
-            <Link to="/create-company">Create Company</Link>
-          </div>
-        )}
-      </div>
-    );
-  } else {
+  }
+  else {
     return (
       <div className="ElseContainer">
         <p>You are not part of any company.</p>

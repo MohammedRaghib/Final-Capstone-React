@@ -10,8 +10,7 @@ function OneCompanyDetails({ userInfo, setUserInfo }) {
   const location = useLocation();
   const company = location.state;
   const CompanyInfo = company.company;
-  const personal = CompanyInfo.personal;
-  const [CompView, setCompView] = useState("notifications");
+  const [CompView, setCompView] = useState("all_tasks");
   const [loading, setLoading] = useState(true);
   const BaseURL = "http://127.0.0.1:8000/";
   const [searchQuery, setSearchQuery] = useState("");
@@ -419,7 +418,8 @@ function OneCompanyDetails({ userInfo, setUserInfo }) {
           Authorization: `Bearer ${userInfo.access}`,
         },
       });
-      const data = await response.json();
+      const data = response;
+      console.log("Deleted company:", data);
     } catch (error) {
       console.error("Error deleting company:", error);
     }
@@ -438,7 +438,6 @@ function OneCompanyDetails({ userInfo, setUserInfo }) {
       <div className="container-dashboard">
         <aside className="Sidebar">
           <nav className="SideNav">
-            {!personal && (
               <li className="SideNavItem">
                 <button
                   onClick={() => setCompView("CompanyInfo_users")}
@@ -447,7 +446,6 @@ function OneCompanyDetails({ userInfo, setUserInfo }) {
                   All Company Users
                 </button>
               </li>
-            )}
             <li className="SideNavItem">
               <button
                 onClick={() => setCompView("all_tasks")}
@@ -464,7 +462,6 @@ function OneCompanyDetails({ userInfo, setUserInfo }) {
                 All Notifications
               </button>
             </li>
-            {!personal && (
               <li className="SideNavItem">
                 <button
                   onClick={() => setCompView("add_user")}
@@ -473,7 +470,6 @@ function OneCompanyDetails({ userInfo, setUserInfo }) {
                   Invite User
                 </button>
               </li>
-            )}
             <li className="SideNavItem">
               <button
                 onClick={() => setCompView("add_task")}
@@ -502,14 +498,14 @@ function OneCompanyDetails({ userInfo, setUserInfo }) {
                 Delete Company
               </button>
             </aside>
-            {!personal && CompView === "CompanyInfo_users" && (
+            { CompView === "CompanyInfo_users" && (
               <AllCompanyUsers
                 CompanyInfo={CompanyInfo}
                 CompanyUsers={CompanyUsers}
                 removeUserFromCompany={removeUserFromCompany}
               />
             )}
-            {!personal && CompView === "add_user" && (
+            {CompView === "add_user" && (
               <AddNewCompanyUser
                 InviteUser={InviteUser}
                 searchQuery={searchQuery}

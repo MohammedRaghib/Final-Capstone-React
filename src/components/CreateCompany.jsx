@@ -5,15 +5,14 @@ import "./styles/createcomp.css";
 const CreateCompany = ({ userInfo, setUserInfo }) => {
   const [companyName, setCompanyName] = useState("");
   const [notifications, setNotifications] = useState([]);
-  const [company, setCompany] = useState();
+  const [company, setCompany] = useState({});
   const [loading, setLoading] = useState(true);
   const [companyInfo, setCompanyInfo] = useState({});
-  const [Personal, setPersonal] = useState(false);
   const [companyInfoFetched, setCompanyInfoFetched] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const BaseURL = "http://127.0.0.1:8000/";
-
+ 
   const fetchCompanies = async () => {
     try {
       const response = await fetch(`${BaseURL}usercompanies/`, {
@@ -26,7 +25,7 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
       }
       const data = await response.json();
       console.log("Companies data:", data);
-      setCompany(data.companies || {});
+      setCompany(data.company || {});
     } catch (error) {
       console.error("Error fetching companies:", error);
     } finally {
@@ -48,7 +47,7 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
             }
           );
           const data = await response.json();
-          setCompanyInfo(data);
+          setCompanyInfo(data.company || {});
           setCompanyInfoFetched(true);
           console.log("CompanyInfo:", data);
         } catch (error) {
@@ -177,11 +176,6 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
     }
     return Object.keys(obj).length === 0;
   };
-  const handlePersonalSubmit = (e) => {
-    e.preventDefault();
-    setPersonal(true);
-    setTimeout(() => document.getElementById("companyForm").requestSubmit(), 0);
-  };
 
   useEffect(() => {
     fetchCompanies();
@@ -213,7 +207,7 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
         <a href="/all-dashboard">Back to company dashboard</a>
       </section>
     );
-  } else {
+  } else if(isEmpty(company) || userInfo?.user?.is_superuser) {
     return (
       <div className="CreateCompanyCont">
         <h2 className="CreateCompanyTitle">Create Company</h2>
@@ -231,14 +225,6 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
           />
           <button type="submit" name="Public">
             Create
-          </button>
-          <button name="Personal" type="submit">
-            <abbr
-              title="You will not be able to invite other users"
-              className="Abbriviation"
-            >
-              Create Personal Company
-            </abbr>
           </button>
         </form>
         <section className="InvitesCont">

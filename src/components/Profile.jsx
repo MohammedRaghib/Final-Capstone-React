@@ -8,6 +8,7 @@ function Profile({ userInfo, setUserInfo }) {
     username: userInfo?.user.username || "",
     first_name: userInfo?.user.first_name || "",
     last_name: userInfo?.user.last_name || "",
+    password: '',
     profile_picture: null,
   });
 
@@ -146,6 +147,14 @@ function Profile({ userInfo, setUserInfo }) {
               onChange={handleChange}
               placeholder="Email"
               className="ProfEmail"
+            />
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="ProfPassword"
             />
             <button type="submit" className="btn">
               Save

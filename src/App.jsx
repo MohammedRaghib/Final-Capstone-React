@@ -10,6 +10,7 @@ import Nav from "./components/Nav";
 import OverallAdmin from "./components/OverallAdmin";
 import OneCompanyDetails from "./components/OneCompanyDetails";
 import Profile from "./components/Profile";
+import CreatePersonal from "./components/CreatePersonal";
 
 const App = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -73,6 +74,16 @@ const App = () => {
             element={
               userInfo ? (
                 <CreateCompany userInfo={userInfo} setUserInfo={setUserInfo} />
+              ) : (
+                <Login setUserInfo={setUserInfo} />
+              )
+            }
+          />
+          <Route
+            path="/create-personal"
+            element={
+              userInfo ? (
+                <CreatePersonal userInfo={userInfo} setUserInfo={setUserInfo} />
               ) : (
                 <Login setUserInfo={setUserInfo} />
               )
