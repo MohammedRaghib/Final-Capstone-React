@@ -605,7 +605,7 @@ const PersonalDashboard = ({ userInfo }) => {
                           </select>
                           <br />
                           <button
-                            className="PersonalDashboardTaskDeleteButton"
+                            className="DeleteTaskBtn"
                             onClick={async () => {
                               const confirmRemoval = window.confirm(
                                 `Are you sure you want to delete ${task.title}?`
@@ -618,7 +618,7 @@ const PersonalDashboard = ({ userInfo }) => {
                             Delete Task
                           </button>
                           <button
-                            className="PersonalDashboardTaskEditButton"
+                            className="EditTaskBtn"
                             onClick={() => {
                               setEditingTaskId(task.id);
                               setTaskForm({
