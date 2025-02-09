@@ -70,10 +70,11 @@ const AllCompanyTasks = ({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+        <div className="selects">
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="select"
+          className="select filter"
         >
           <option value="">All Statuses</option>
           <option value="TODO">To do</option>
@@ -83,7 +84,7 @@ const AllCompanyTasks = ({
         <select
           value={dateFilter}
           onChange={(e) => setDateFilter(e.target.value)}
-          className="select"
+          className="select filter"
         >
           <option value="">All Dates</option>
           <option value="TODAY">Today</option>
@@ -91,6 +92,7 @@ const AllCompanyTasks = ({
           <option value="NEXT_WEEK">Next Week</option>
           <option value="AFTER_NEXT_WEEK">After Next Week</option>
         </select>
+        </div>
       </div>
       <div className="PersonalDashboardTasksList">
         {filteredTasks.length > 0 ? (

@@ -210,7 +210,7 @@ const CreateCompany = ({ userInfo }) => {
   } else if (isEmpty(company) || userInfo?.user?.is_superuser) {
     return (
       <div className="CreateCompanyCont">
-        <h2 className="CreateCompanyTitle">Create Company</h2>
+        <h2 className="AdminTitle">Create Company</h2>
         <form
           onSubmit={handleSubmit}
           className="CreateCompanyForm"

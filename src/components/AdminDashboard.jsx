@@ -755,7 +755,6 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
                         <div className="TaskCont">
                           <h3
                             className="TaskTitle"
-                            style={{ textAlign: "left" }}
                           >
                             {task.title}
                           </h3>

@@ -14,6 +14,7 @@
 }
 .Filters select {
   margin: 5px;
+  /* width: 20%; */
 }
 .select {
   margin-top: 5px;
@@ -34,7 +35,6 @@
   padding: 20px;
   border-radius: 8px;
 }
-
 
 .TaskTitle {
   color: var(--text-color);
@@ -138,4 +138,19 @@ h3{
 .Task{
   border: var(--border-color) 2px solid;
   padding: 20px;
+}
+
+.EditTaskBtn,
+.DeleteTaskBtn{
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.EditTaskBtn:hover,
+.DeleteTaskBtn:hover{
+  background-color: var(--link-color);
 }

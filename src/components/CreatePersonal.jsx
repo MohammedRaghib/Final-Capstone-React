@@ -111,7 +111,7 @@ const CreatePersonal = ({ userInfo }) => {
     <div className="CreatePersonalCont">
       {(isEmpty(personalInfo) || userInfo?.user?.is_superuser) && (
         <>
-          <h2 className="CreatePersonalTitle">Create Personal</h2>
+          <h2 className="AdminTitle">Create Personal</h2>
           <form
             onSubmit={handlePersonalSubmit}
             className="CreatePersonalForm"
