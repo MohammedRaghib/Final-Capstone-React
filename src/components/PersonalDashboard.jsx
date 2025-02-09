@@ -338,7 +338,7 @@ const PersonalDashboard = ({ userInfo }) => {
   const filteredTasks = PersonalInfo?.tasks?.filter((task) => {
     const matchesStatus = statusFilter ? task.status === statusFilter : true;
     const categoryMatches = catergoryFilter
-      ? task.category.id === parseInt(catergoryFilter)
+      ? task?.category?.id === parseInt(catergoryFilter)
       : true;
     const [startDate, endDate] = getDateRange(dateFilter);
     const taskDueDate = normalizeDate(new Date(task.due_date));
@@ -348,9 +348,12 @@ const PersonalDashboard = ({ userInfo }) => {
     const matchesSearchQuery =
       task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      task.category.name.toLowerCase().includes(searchQuery.toLowerCase());
+      task?.category?.name.toLowerCase().includes(searchQuery.toLowerCase());
     return (
-      matchesStatus && categoryMatches && matchesDateRange && matchesSearchQuery
+      matchesStatus &&
+      categoryMatches &&
+      matchesDateRange &&
+      matchesSearchQuery
     );
   });
   const API_URL = "http://127.0.0.1:8000/categories";
@@ -732,8 +735,8 @@ const PersonalDashboard = ({ userInfo }) => {
                   onChange={(e) =>
                     setTaskForm({ ...TaskForm, category: e.target.value })
                   }
-                  required
                 >
+                  <option value="">No category selected</option>
                   {allCategories.length > 0 ? (
                     allCategories.map((category) => (
                       <option value={category.id} key={category.id}>
@@ -767,14 +770,14 @@ const PersonalDashboard = ({ userInfo }) => {
                   }}
                   className="AddCatForm"
                 >
-                    <input
-                      type="text"
-                      id="categoryName"
-                      name="categoryName"
-                      placeholder="Category Name"
-                      required
-                    />
-                  <button type="submit" className="AddCategoryButton" >
+                  <input
+                    type="text"
+                    id="categoryName"
+                    name="categoryName"
+                    placeholder="Category Name"
+                    required
+                  />
+                  <button type="submit" className="AddCategoryButton">
                     Add Category
                   </button>
                 </form>

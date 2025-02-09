@@ -293,7 +293,7 @@ const OnePersonalDetails = ({ userInfo }) => {
   const filteredTasks = PersonalInfo?.tasks?.filter((task) => {
     const matchesStatus = statusFilter ? task.status === statusFilter : true;
     const categoryMatches = catergoryFilter
-      ? task.category.id === parseInt(catergoryFilter)
+      ? task?.category?.id === parseInt(catergoryFilter)
       : true;
     const [startDate, endDate] = getDateRange(dateFilter);
     const taskDueDate = normalizeDate(new Date(task.due_date));
@@ -303,7 +303,7 @@ const OnePersonalDetails = ({ userInfo }) => {
     const matchesSearchQuery =
       task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      task.category.name.toLowerCase().includes(searchQuery.toLowerCase());
+      task?.category?.name.toLowerCase().includes(searchQuery.toLowerCase());
     return (
       matchesStatus && categoryMatches && matchesDateRange && matchesSearchQuery
     );
@@ -446,9 +446,7 @@ const OnePersonalDetails = ({ userInfo }) => {
       </aside>
       <div className="PersonalDashboardMain">
         <div className="PersonalDashboardHeader">
-          <h2 className="PersonalDashboardInfoDetailTitle">
-            {personal?.name}
-          </h2>
+          <h2 className="PersonalDashboardInfoDetailTitle">{personal?.name}</h2>
           <button
             className="DeletePersonalButton"
             onClick={() => {
@@ -663,8 +661,8 @@ const OnePersonalDetails = ({ userInfo }) => {
                 onChange={(e) =>
                   setTaskForm({ ...TaskForm, category: e.target.value })
                 }
-                required
               >
+                <option value="">No category selected</option>
                 {allCategories.length > 0 ? (
                   allCategories.map((category) => (
                     <option value={category.id} key={category.id}>
@@ -672,7 +670,9 @@ const OnePersonalDetails = ({ userInfo }) => {
                     </option>
                   ))
                 ) : (
-                  <option value="">No category found</option>
+                  <option value="" disabled>
+                    No category found
+                  </option>
                 )}
               </select>
               <input
