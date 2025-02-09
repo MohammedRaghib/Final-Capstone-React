@@ -17,6 +17,7 @@
 }
 .select {
   margin-top: 5px;
+  margin-bottom: 5px;
 }
 .Filters input,
 .Filters select {
@@ -77,7 +78,7 @@
   flex-direction: column;
   background-color: var(--secondary-color) ;
 }
-.AddingPersonalTask h2{
+h3{
   color: var(--accent-color);
 }
 .AddingPersonalTask input[type="text"],

@@ -19,6 +19,7 @@
 }
 .profile-card {
   background: var(--primary-color);
+  border: var(--border-color) 2px solid;
   border-radius: 15px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -109,6 +110,7 @@
   background-color: rgb(18, 18, 18);
   padding: 20px;
   border-radius: 8px;
+  border: var(--border-color) 2px solid;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 100;
   width: 300px;
