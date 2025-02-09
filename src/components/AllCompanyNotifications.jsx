@@ -11,7 +11,7 @@ const Notification = ({ notification, delNotification }) => (
         <button
           onClick={() => delNotification(notification.user, notification.id)}
         >
-          Mark as read
+          Delete
         </button>
       </div>
     </div>

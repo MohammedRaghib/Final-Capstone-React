@@ -95,17 +95,20 @@ function Profile({ userInfo, setUserInfo }) {
           <p>
             <b>Last Name:</b> {userInfo?.user?.last_name}
           </p>
-          <button className="btn" onClick={() => showForm(true)}>
+          <button className="Editbtn" onClick={() => showForm(true)}>
             Edit Profile
           </button>
         </div>
       </section>
       <aside className="ProfileFormCont">
         <section className="EditProfileFormCont">
+          <aside className="Btn">
           <button className="btn" onClick={() => showForm(false)}>
-            Close
+            ❌
           </button>
+          </aside>
           <form onSubmit={handleSubmit} className="EditProfForm">
+            <label htmlFor="">Add Profile Pic</label>
             <div className="upload-button">
               <input
                 type="file"
@@ -156,7 +159,7 @@ function Profile({ userInfo, setUserInfo }) {
               placeholder="Password"
               className="ProfPassword"
             />
-            <button type="submit" className="btn">
+            <button type="submit" className="Savebtn">
               Save
             </button>
           </form>

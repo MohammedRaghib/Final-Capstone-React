@@ -19,6 +19,7 @@ const AddNewCompanyTask = ({
           value={TaskForm.taskTitle}
           name="taskTitle"
           onChange={handleChange}
+          required
         />
         <textarea
           placeholder="Task Description"
@@ -31,6 +32,7 @@ const AddNewCompanyTask = ({
           value={TaskForm.dueDate}
           name="dueDate"
           onChange={handleChange}
+          required
         />
         <h4>Assign to Users</h4>
         <aside className="AllUsersToAssign">

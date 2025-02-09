@@ -37,14 +37,17 @@ const CreatePersonal = ({ userInfo }) => {
   const handlePersonalSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${BaseURL}create-personal/${userInfo?.user?.id}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.access}`,
-        },
-        body: JSON.stringify({ name: personalName, admin: admin }),
-      });
+      const response = await fetch(
+        `${BaseURL}create-personal/${userInfo?.user?.id}/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+          body: JSON.stringify({ name: personalName, admin: admin }),
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         console.log("Personal data:", data);
@@ -55,9 +58,9 @@ const CreatePersonal = ({ userInfo }) => {
     } catch (error) {
       console.error("Error creating personal:", error);
     }
-    if(userInfo?.user?.is_superuser){
-    navigate("/all-dashboard");
-    }else{
+    if (userInfo?.user?.is_superuser) {
+      navigate("/all-dashboard");
+    } else {
       navigate("/personal-dashboard");
     }
   };
@@ -121,13 +124,13 @@ const CreatePersonal = ({ userInfo }) => {
               onChange={(e) => setPersonalName(e.target.value)}
               required
             />
-            <button type="submit" name="Public">
+            <button type="submit" name="Public" className="CreatePersonalButton">
               Create
             </button>
           </form>
           {userInfo?.user?.is_superuser && (
             <section className="AdminSection">
-              <h2 className="AdminTitle">Select Admin For Company</h2>
+              <h2 className="AdminTitle">Select Admin For Personal Account</h2>
               <input
                 type="text"
                 placeholder="Search Users"
@@ -137,11 +140,7 @@ const CreatePersonal = ({ userInfo }) => {
               />
               <section className="UserList">
                 {users.map((user) => (
-                  <li
-                    key={user.id}
-                    className="UserItem"
-                    style={{ display: "flex" }}
-                  >
+                  <li key={user.id} className="UserItem">
                     <input
                       type="radio"
                       name="admin"
@@ -159,7 +158,7 @@ const CreatePersonal = ({ userInfo }) => {
       {!isEmpty(personalInfo) && !userInfo?.user?.is_superuser && (
         <section className="ElseContainer">
           <p className="AlreadyInCompany">You are already have an account</p>
-          <a href="/">Back to personal dashboard</a>
+          <a href="/personal-dashboard">Back to personal dashboard</a>
         </section>
       )}
     </div>

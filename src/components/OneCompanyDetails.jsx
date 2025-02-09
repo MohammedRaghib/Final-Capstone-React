@@ -6,7 +6,7 @@ import AllCompanyTasks from "./AllCompanyTasks";
 import AddNewCompanyTask from "./AddNewCompanyTask";
 import AllCompanyNotifications from "./AllCompanyNotifications";
 
-function OneCompanyDetails({ userInfo, setUserInfo }) {
+function OneCompanyDetails({ userInfo }) {
   const location = useLocation();
   const company = location.state;
   const CompanyInfo = company.company;

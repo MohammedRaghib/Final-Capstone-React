@@ -8,21 +8,55 @@
   --border-color: rgb(51, 51, 51);
 }
 
-.OverallAdminDashboardCont {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+.OverallAdminDashboardCont input{
+  width: 30%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px var(--border-color) solid;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
+.container-dashboard {
+  display: grid;
+  grid-template-columns: 200px auto;
+  gap: 20px;
+  min-height: 100vh;
+}
+
+.SideNav {
+  justify-self: left;
+}
+
+.Sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--secondary-color);
+  padding: 10px;
+}
+
+.SideNavItem {
+  margin: 10px;
+  background-color: var(--secondary-color);
+}
+
+.SideNavLink {
+  background-color: var(--secondary-color);
+}
 .AdminTitle {
   color: var(--accent-color);
 }
 
-.AllCompaniesTable {
+.AllCompaniesTable,
+.AllPersonalsTable,
+.AllUsersTable {
   width: 90%;
   border-collapse: collapse;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .TableHeader th,
@@ -33,9 +67,12 @@
 
 .TableHeader th {
   background-color: var(--secondary-color);
+  border: 2px var(--border-color) solid;
 }
 
 .TableBody td {
+  border: 2px var(--border-color) solid;
+  padding: 20px;
   background-color: var(--primary-color);
 }
 
@@ -47,21 +84,12 @@ a {
   text-align: left;
 }
 
-.CompanyNameTh,
-.CompanyAdminTh,
-.CompanyPersonalTh,
-.CompanyUserCountTh,
-.CompanyInvitedTh {
-  border: 2px var(--border-color) solid;
+.DelUser{
+  background-color: var(--accent-color);
+  padding: 10px;
 }
-
-.CompanyNameTd,
-.CompanyAdminTd,
-.CompanyPersonalTd,
-.CompanyUserCountTd,
-.CompanyInvitedTd {
-  border: 2px var(--border-color) solid;
-  padding: 20px;
+.DelUser:hover{
+  background-color: var(--link-color);
 }
 @media (max-width: 760px) {
   .AllCompaniesTable {

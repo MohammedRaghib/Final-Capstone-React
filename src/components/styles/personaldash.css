@@ -1,0 +1,140 @@
+:root {
+  --background-color: #121212;
+  --primary-color: #1f1f1f;
+  --secondary-color: #292929;
+  --accent-color: #bb86fc;
+  --text-color: #e0e0e0;
+  --link-color: #03dac6;
+  --border-color: #ffffff;
+}
+.Filters {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+.Filters select {
+  margin: 5px;
+}
+.select {
+  margin-top: 5px;
+}
+.Filters input,
+.Filters select {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.TaskDashboard {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+
+.TaskTitle {
+  color: var(--text-color);
+}
+
+.TaskFormField {
+  margin-bottom: 15px;
+}
+
+.TaskInput,
+.TaskTextarea,
+.TaskDate,
+.TaskSelect {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.TaskButton {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.TaskPersonalForm{
+  justify-content: center;
+}
+.AddingPersonalTask{
+  background-color: var(--primary-color);
+  padding: 20px;
+  border-radius: 8px;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--secondary-color) ;
+}
+.AddingPersonalTask h2{
+  color: var(--accent-color);
+}
+.AddingPersonalTask input[type="text"],
+.AddingPersonalTask input[type="date"],
+.AddingPersonalTask select{
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px var(--border-color) solid;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+.allcontadd{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.PersonalDashboardHeader{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px;
+}
+.DeletePersonalButton{
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.DeletePersonalButton:hover{
+  background-color: var(--link-color);
+}
+
+.PersonalDashboardHeader h2{
+  color: var(--accent-color);
+}
+.categoryselect{
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.PersonalDashboardTasksList{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 10px;
+  justify-content: space-evenly;
+  align-items: center;
+  align-items: center;
+}
+
+.PersonalDashboardTask,
+.Task{
+  border: var(--border-color) 2px solid;
+  padding: 20px;
+}

@@ -37,6 +37,7 @@
   background-color: var(--secondary-color);
 }
 
+.PersonalDashboardInfoDetailTitle,
 .CompanyName {
   text-align: left;
 }
@@ -87,28 +88,34 @@
 .CompanyUser p {
   color: var(--text-color);
 }
-
-.TaskCont {
+.PersonalDashboardTasks,
+.TaskCompany {
   border: 2px solid var(--border-color);
   padding: 10px;
   background-color: var(--primary-color);
   width: 90%;
 }
 
+.PersonalDashboardTasksList,
 .TaskCompany {
   list-style-type: none;
   padding: 0;
 }
 
 .TaskTitle {
-  color: var(--accent-color);
+  color: var(--accent-color) !important;
 }
 
-.TaskDesc {
+.TaskDesc,
+.TaskDescription {
   color: var(--text-color);
 }
 
 .TaskDueDate {
+  color: var(--text-color);
+}
+
+.TaskCategory {
   color: var(--text-color);
 }
 
@@ -165,7 +172,8 @@
   padding: 10px;
 }
 
-.AddingCompanyTask {
+.AddingCompanyTask,
+.AddTaskDashboard {
   background-color: var(--primary-color);
   border: 2px var(--border-color) solid;
   padding: 20px;
@@ -235,6 +243,76 @@
   margin: 0;
 }
 
+.CategoriesDashboard {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.AddCategoryDashboard {
+  background-color: var(--primary-color);
+  padding: 20px;
+  border-radius: 8px;
+  border: var(--border-color) solid 2px;
+}
+
+.AddCategoryTitle,
+.CategoriesTitle {
+  color: var(--accent-color);
+}
+
+.AddCatForm {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin-top: 10px;
+  flex-direction: row;
+  gap: 0;
+}
+
+.AddCatForm input {
+  width: 50%;
+  margin: 10px;
+}
+.AddCategoryButton {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.CategoriesList {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 20px;
+}
+.CategoriesList input {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.Category {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: 8px;
+  margin: 10px;
+}
+
+.Category button {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
 .AddUser {
   background-color: var(--primary-color);
   border: 2px var(--border-color) solid;
@@ -294,16 +372,28 @@
   justify-content: center;
   margin-top: 10%;
 }
+.NotificationsDashboard,
 .NotificationCont {
   width: 80%;
 }
-.NotificationMessageAndBtnCont {
+
+.NotificationMessageAndBtnCont,
+.Notification {
   display: flex;
   justify-content: space-between;
 }
 
-.AllEmployeeNotifications{
+.AllEmployeeNotifications {
   display: none;
+}
+.TaskForm {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+}
+.TaskTitle {
+  text-align: center;
 }
 @media (max-width: 1024px) {
   .container-dashboard {
@@ -331,12 +421,12 @@
     width: 100%;
   }
 }
-.NameAndLeave{
+.NameAndLeave,
+.PersonalDashboardHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
 
 @media (max-width: 480px) {
   .CompanyUser,
@@ -362,4 +452,60 @@
   .AllUsersToAssign {
     grid-template-columns: auto auto;
   }
+}
+.ElseContainer {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.ElseContainer p {
+  margin-bottom: 10px;
+}
+
+.CreateCompanyLink {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.InvitesCont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.InvitesHead {
+  color: var(--text-color);
+}
+
+.NotificationCont {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.NotificationCompany {
+  margin-bottom: 10px;
+}
+
+.InviteButton {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.InviteButton:last-child {
+  margin-right: 0;
 }

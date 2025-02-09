@@ -9,6 +9,7 @@ const AddNewCompanyUser = ({
   return (
     <section className="AddUser">
       <span>Search Users to invite: </span>
+      <br />
       <input
         type="text"
         placeholder="Search for users"

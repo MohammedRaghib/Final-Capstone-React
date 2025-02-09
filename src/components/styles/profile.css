@@ -69,12 +69,9 @@
 .profile-card .actions a i {
   margin-right: 5px;
 }
-.btn {
-  background-color: var(--accent-color);
-  margin: 10px;
-}
-.btn:hover {
-  background-color: var(--link-color);
+.Btn {
+  display: flex;
+  justify-content: end;
 }
 
 .upload-button {
@@ -150,16 +147,23 @@
 .ProfEmail::placeholder {
   color: var(--text-color);
 }
-
-button.btn {
-  background-color: var(--accent-color);
+.Savebtn,
+.Editbtn,
+.btn {
   color: var(--text-color);
   border: none;
   padding: 10px;
   border-radius: 4px;
   cursor: pointer;
 }
-
-button.btn:hover {
+.btn:hover {
+  background-color: red;
+}
+.Savebtn,
+.Editbtn {
+  background-color: var(--accent-color);
+}
+.Savebtn:hover,
+.Editbtn:hover {
   background-color: var(--link-color);
 }

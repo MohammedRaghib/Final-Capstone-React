@@ -11,6 +11,8 @@ import OverallAdmin from "./components/OverallAdmin";
 import OneCompanyDetails from "./components/OneCompanyDetails";
 import Profile from "./components/Profile";
 import CreatePersonal from "./components/CreatePersonal";
+import PersonalDashboard from "./components/PersonalDashboard";
+import OnePersonalDetails from "./components/OnePersonalDetails";
 
 const App = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -40,7 +42,7 @@ const App = () => {
               !userInfo ? (
                 <Login setUserInfo={setUserInfo} userInfo={userInfo} />
               ) : (
-                <AdminDashboard userInfo={userInfo}  setUserInfo={setUserInfo} />
+                <AdminDashboard userInfo={userInfo} setUserInfo={setUserInfo} />
               )
             }
           />
@@ -50,7 +52,7 @@ const App = () => {
               !userInfo ? (
                 <Register setUserInfo={setUserInfo} />
               ) : (
-                <AdminDashboard userInfo={userInfo}  setUserInfo={setUserInfo} />
+                <AdminDashboard userInfo={userInfo} setUserInfo={setUserInfo} />
               )
             }
           />
@@ -61,19 +63,38 @@ const App = () => {
                 userInfo.user.is_superuser ? (
                   <OverallAdmin userInfo={userInfo} />
                 ) : (
-                  <AdminDashboard userInfo={userInfo}  setUserInfo={setUserInfo} />
+                  <AdminDashboard
+                    userInfo={userInfo}
+                    setUserInfo={setUserInfo}
+                  />
                 )
               ) : (
                 <Login setUserInfo={setUserInfo} />
               )
             }
           />
-
+          <Route
+            path="/personal-dashboard"
+            element={
+              userInfo ? (
+                userInfo.user.is_superuser ? (
+                  <OverallAdmin userInfo={userInfo} />
+                ) : (
+                  <PersonalDashboard
+                    userInfo={userInfo}
+                    setUserInfo={setUserInfo}
+                  />
+                )
+              ) : (
+                <Login setUserInfo={setUserInfo} />
+              )
+            }
+          />
           <Route
             path="/create-company"
             element={
               userInfo ? (
-                <CreateCompany userInfo={userInfo} setUserInfo={setUserInfo} />
+                <CreateCompany userInfo={userInfo} />
               ) : (
                 <Login setUserInfo={setUserInfo} />
               )
@@ -83,7 +104,7 @@ const App = () => {
             path="/create-personal"
             element={
               userInfo ? (
-                <CreatePersonal userInfo={userInfo} setUserInfo={setUserInfo} />
+                <CreatePersonal userInfo={userInfo} />
               ) : (
                 <Login setUserInfo={setUserInfo} />
               )
@@ -94,9 +115,23 @@ const App = () => {
             element={
               userInfo ? (
                 userInfo.user.is_superuser ? (
-                  <OneCompanyDetails userInfo={userInfo} setUserInfo={setUserInfo}/>
+                  <OneCompanyDetails userInfo={userInfo} />
                 ) : (
                   <CreateCompany userInfo={userInfo} />
+                )
+              ) : (
+                <Login setUserInfo={setUserInfo} />
+              )
+            }
+          />
+          <Route
+            path="/personal"
+            element={
+              userInfo ? (
+                userInfo.user.is_superuser ? (
+                  <OnePersonalDetails userInfo={userInfo} />
+                ) : (
+                  <CreatePersonal userInfo={userInfo} />
                 )
               ) : (
                 <Login setUserInfo={setUserInfo} />

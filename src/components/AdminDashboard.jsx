@@ -9,13 +9,18 @@ import AllCompanyNotifications from "./AllCompanyNotifications";
 
 const AdminDashboard = ({ userInfo, setUserInfo }) => {
   const [company, setCompanies] = useState();
+  const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [companyInfoFetched, setCompanyInfoFetched] = useState(false);
   const BaseURL = "http://127.0.0.1:8000/";
   const [searchQuery, setSearchQuery] = useState("");
+  const [TaskSearchQuery, setTaskSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
   const [AllUsers, setAllUsers] = useState([]);
   const [CompanyInfo, setCompanyInfo] = useState({});
   const [FilteredUsers, setFilteredUsers] = useState([]);
+  const [FilteredTasks, setFilteredTasks] = useState([]);
   const [CompanyUsers, SetCompanyUsers] = useState([]);
   const [FetchCount, setFetchCount] = useState(0);
   const [TaskForm, setTaskForm] = useState({
@@ -230,7 +235,6 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
       : [];
 
     setFilteredUsers(invite_filtered_users);
-    // setFilteredUsers(filtered_users);
   };
 
   useEffect(() => {
@@ -469,6 +473,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
   const handleView = (view) => {
     setCompView(view);
   };
+
   const isEmpty = (obj) => {
     if (obj == null) {
       return true;
@@ -487,7 +492,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
       .then((response) => {
         if (response.status === 204) {
           console.log("Notification deleted");
-          alert("Notification marked as read");
+          alert("Notification deleted");
         } else if (response.status === 404) {
           return response.json().then((data) => {
             console.log(data.detail);
@@ -500,7 +505,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("Notification not marked as read");
+        alert("Notification not deleted");
       });
     location.reload();
   };
@@ -515,12 +520,151 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
       notifications.style.display = "block";
     }
   };
+  const getNotifications = async () => {
+    const userId = userInfo?.user.id;
+    try {
+      setLoading(true);
+      const response = await fetch(`${BaseURL}notifications/${userId}/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.access}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error inviting user");
+      }
+
+      const data = await response.json();
+      console.log(data.detail);
+      console.table(data.notifications);
+      setNotifications(data.notifications);
+    } catch (error) {
+      console.error("Failed getting notifications.", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const acceptOrDeclineInvite = async (companyid, method) => {
+    const url = `${BaseURL}accept_or_decline_invite/${userInfo?.user.id}/${companyid}/`;
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.access}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to process the request.");
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      if (method === "POST") {
+        console.log("User added to the company");
+      } else if (method === "DELETE") {
+        console.log("Company offer declined");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    location.reload();
+  };
+
+  const filtered_notifications = notifications.filter((notification) => {
+    return notification.message === "Invite";
+  });
+  const normalizeDate = (date) => {
+    date.setHours(0, 0, 0, 0);
+    return date;
+  };
+
+  const getDateRange = (filter) => {
+    const today = normalizeDate(new Date(Date.now()));
+    const tomorrow = normalizeDate(new Date(today));
+    tomorrow.setDate(today.getDate() + 1);
+    const nextWeek = normalizeDate(new Date(today));
+    nextWeek.setDate(today.getDate() + 7);
+    const afterNextWeek = normalizeDate(new Date(today));
+    afterNextWeek.setDate(today.getDate() + 14);
+
+    switch (filter) {
+      case "TODAY":
+        return [today, today];
+      case "TOMORROW":
+        return [tomorrow, tomorrow];
+      case "NEXT_WEEK":
+        return [today, nextWeek];
+      case "AFTER_NEXT_WEEK":
+        return [nextWeek, null];
+      default:
+        return [null, null];
+    }
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    const matchesStatus = statusFilter ? task.status === statusFilter : true;
+    const [startDate, endDate] = getDateRange(dateFilter);
+    const taskDueDate = normalizeDate(new Date(task.due_date));
+    const matchesDateRange =
+      (!startDate || taskDueDate >= startDate) &&
+      (!endDate || taskDueDate <= endDate);
+    const matchesSearchQuery =
+      task.title.toLowerCase().includes(TaskSearchQuery.toLowerCase()) ||
+      task.description.toLowerCase().includes(TaskSearchQuery.toLowerCase());
+    return matchesStatus && matchesDateRange && matchesSearchQuery;
+  });
+  useEffect(() => {
+    getNotifications();
+  }, []);
+
   if (isEmpty(company) && !userInfo?.user?.is_superuser) {
     return (
-      <div className="ElseContainer">
-        <p>You are not part of any company.</p>
-        <Link to="/create-company">Create Company</Link>
-      </div>
+      <>
+        <div className="ElseContainer">
+          <p>
+            You are not part of any company. Create one or accept an invite.
+          </p>
+          <Link to="/create-company" className="CreateCompanyLink">
+            Create Company
+          </Link>
+        </div>
+        <section className="InvitesCont">
+          <h3 className="InvitesHead">Invites</h3>
+          {filtered_notifications.length > 0 ? (
+            filtered_notifications.map((notification) => (
+              <div className="NotificationCont" key={notification.created_at}>
+                <p className="NotificationCompany">
+                  {notification?.company?.name} has invited you to join the
+                  company
+                </p>
+                <button
+                  onClick={() =>
+                    acceptOrDeclineInvite(notification.company.id, "POST")
+                  }
+                  className="InviteButton"
+                >
+                  Accept invite
+                </button>
+                <button
+                  onClick={() =>
+                    acceptOrDeclineInvite(notification.company.id, "DELETE")
+                  }
+                  className="InviteButton"
+                >
+                  Decline invite
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="NotificationCompany">No invites yet</p>
+          )}
+        </section>
+      </>
     );
   }
   if (userInfo?.user?.is_superuser) {
@@ -553,7 +697,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
             </li>
           </nav>
         </aside>
-        <section className="TaskCompany">
+        <aside>
           <aside className="NameAndLeave">
             <h1 className="CompanyName">{company.name}</h1>
             <button
@@ -570,103 +714,151 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
               Leave
             </button>
           </aside>
-          <div className="AllEmployeeTasks">
-            {tasks.length > 0 ? (
-              tasks.map((task) => {
-                return (
-                  <li key={task.id} className="Task">
-                    <div className="TaskCont">
-                      <h3 className="TaskTitle">{task.title}</h3>
-                      <p className="TaskDesc">{task.description}</p>
-                      <code className="TaskDueDate">
-                        Due date: {task.due_date}
-                      </code>
-                      <br />
-                      <br />
-                      <select
-                        value={task.status}
-                        className="select"
-                        onChange={(e) =>
-                          updateTaskStatus(task.id, e.target.value)
-                        }
-                      >
-                        <option value="TODO">To do</option>
-                        <option value="IN_PROGRESS">In Progress</option>
-                        <option value="DONE">Done</option>
-                      </select>
-                      <details className="AllComments">
-                        <summary className="CommentsLabel">Comments:</summary>
-                        <input
-                          type="text"
-                          placeholder="Add a comment"
-                          value={newCommentText}
-                          onChange={(e) => setNewCommentText(e.target.value)}
-                        />
-                        <button
-                          onClick={async () => {
-                            if (!newCommentText.trim()) return;
-                            await addComment(task.id, newCommentText);
-                            setNewCommentText("");
-                          }}
-                        >
-                          Add Comment
-                        </button>
-
-                        <article className="TaskComments">
-                          {task.comments.map((comment) => (
-                            <div key={comment.id} className="Comment">
-                              <h3 className="CommentUser">{comment.user}</h3>
-                              <p className="CommentContent">{comment.text}</p>
-                            </div>
-                          ))}
-                        </article>
-                      </details>
-                    </div>
-                  </li>
-                );
-              })
-            ) : (
-              <p>No tasks assigned</p>
-            )}
-          </div>
-          <div className="AllEmployeeNotifications">
-            <section className="AllCompNotificationsCont">
-              <div className="AllNotifications">
-                {userNotifications?.length > 0 ? (
-                  userNotifications.map((notification) => (
-                    <div className="NotificationCont" key={notification.id}>
-                      <div>
-                        <h2 className="NotificationTitle">New notification</h2>
-                        <div className="NotificationMessageAndBtnCont">
-                          <p className="NotificationMessage">
-                            {notification.message}
-                          </p>
-                          <button
-                            onClick={() =>
-                              delNotification(
-                                notification.user,
-                                notification.id
-                              )
+          <section className="TaskCompany">
+            <div className="AllEmployeeTasks">
+              <div className="Filters">
+                <input
+                  type="text"
+                  placeholder="Search tasks"
+                  value={TaskSearchQuery}
+                  onChange={(e) => setTaskSearchQuery(e.target.value)}
+                />
+                <div className="selects">
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="select filter"
+                  >
+                    <option value="">All Statuses</option>
+                    <option value="TODO">To do</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="DONE">Done</option>
+                  </select>
+                  <select
+                    value={dateFilter}
+                    onChange={(e) => setDateFilter(e.target.value)}
+                    className="select filter"
+                  >
+                    <option value="">All Dates</option>
+                    <option value="TODAY">Today</option>
+                    <option value="TOMORROW">Tomorrow</option>
+                    <option value="NEXT_WEEK">Next Week</option>
+                    <option value="AFTER_NEXT_WEEK">After Next Week</option>
+                  </select>
+                </div>
+              </div>
+              <div className="PersonalDashboardTasksList">
+                {filteredTasks.length > 0 ? (
+                  filteredTasks.map((task) => {
+                    return (
+                      <li key={task.id} className="Task">
+                        <div className="TaskCont">
+                          <h3
+                            className="TaskTitle"
+                            style={{ textAlign: "left" }}
+                          >
+                            {task.title}
+                          </h3>
+                          <p className="TaskDesc">{task.description}</p>
+                          <code className="TaskDueDate">
+                            Due date: {task.due_date}
+                          </code>
+                          <br />
+                          <br />
+                          <select
+                            value={task.status}
+                            className="select"
+                            onChange={(e) =>
+                              updateTaskStatus(task.id, e.target.value)
                             }
                           >
-                            Mark as read
-                          </button>
+                            <option value="TODO">To do</option>
+                            <option value="IN_PROGRESS">In Progress</option>
+                            <option value="DONE">Done</option>
+                          </select>
+                          <details className="AllComments">
+                            <summary className="CommentsLabel">
+                              Comments:
+                            </summary>
+                            <input
+                              type="text"
+                              placeholder="Add a comment"
+                              value={newCommentText}
+                              onChange={(e) =>
+                                setNewCommentText(e.target.value)
+                              }
+                            />
+                            <button
+                              onClick={async () => {
+                                if (!newCommentText.trim()) return;
+                                await addComment(task.id, newCommentText);
+                                setNewCommentText("");
+                              }}
+                            >
+                              Add Comment
+                            </button>
+
+                            <article className="TaskComments">
+                              {task.comments.map((comment) => (
+                                <div key={comment.id} className="Comment">
+                                  <h3 className="CommentUser">
+                                    {comment.user}
+                                  </h3>
+                                  <p className="CommentContent">
+                                    {comment.text}
+                                  </p>
+                                </div>
+                              ))}
+                            </article>
+                          </details>
                         </div>
-                      </div>
-                    </div>
-                  ))
+                      </li>
+                    );
+                  })
                 ) : (
-                  <p className="NoNotifications">No notifications</p>
+                  <p>No tasks assigned</p>
                 )}
               </div>
-            </section>
-          </div>
-        </section>
+            </div>
+            <div className="AllEmployeeNotifications">
+              <section className="AllCompNotificationsCont">
+                <div className="AllNotifications">
+                  {userNotifications?.length > 0 ? (
+                    userNotifications.map((notification) => (
+                      <div className="NotificationCont" key={notification.id}>
+                        <div>
+                          <h2 className="NotificationTitle">
+                            New notification
+                          </h2>
+                          <div className="NotificationMessageAndBtnCont">
+                            <p className="NotificationMessage">
+                              {notification.message}
+                            </p>
+                            <button
+                              onClick={() =>
+                                delNotification(
+                                  notification.user,
+                                  notification.id
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="NoNotifications">No notifications</p>
+                  )}
+                </div>
+              </section>
+            </div>
+          </section>
+        </aside>
       </div>
     );
-  } else if (
-    CompanyInfo?.admin == userInfo.user.id
-  ) {
+  } else if (CompanyInfo?.admin == userInfo.user.id) {
     return (
       <div className="container-dashboard">
         <aside className="Sidebar">
@@ -793,8 +985,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
         )}
       </div>
     );
-  }
-  else {
+  } else {
     return (
       <div className="ElseContainer">
         <p>You are not part of any company.</p>

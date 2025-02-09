@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles/createcomp.css";
 
-const CreateCompany = ({ userInfo, setUserInfo }) => {
+const CreateCompany = ({ userInfo }) => {
   const [companyName, setCompanyName] = useState("");
   const [notifications, setNotifications] = useState([]);
   const [company, setCompany] = useState({});
   const [loading, setLoading] = useState(true);
   const [companyInfo, setCompanyInfo] = useState({});
   const [companyInfoFetched, setCompanyInfoFetched] = useState(false);
+  const [admin, setAdmin] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const BaseURL = "http://127.0.0.1:8000/";
- 
+
   const fetchCompanies = async () => {
     try {
       const response = await fetch(`${BaseURL}usercompanies/`, {
@@ -83,63 +86,26 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
     }
   };
 
-  const createPersonalSystem = async () => {
-    if (!userInfo?.user?.id) {
-      console.error("User ID is required");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `${BaseURL}/create-personal/${userInfo?.user?.id}/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userInfo.access}`,
-          },
-          body: JSON.stringify({ name: companyName }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log("Success:", data);
-        navigate("/all-dashboard");
-      } else {
-        console.error("Error:", data.detail);
-      }
-    } catch (error) {
-      console.error("Network error:", error);
-      alert(`Error: ${response.detail}`);
-    }
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const name = e.nativeEvent.submitter.name;
-    if (name === "Personal") {
-      await createPersonalSystem();
-    } else {
-      try {
-        const response = await fetch(`${BaseURL}companies/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userInfo.access}`,
-          },
-          body: JSON.stringify({ name: companyName }),
-        });
+    try {
+      const response = await fetch(`${BaseURL}companies/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.access}`,
+        },
+        body: JSON.stringify({ name: companyName, admin: admin }),
+      });
 
-        const data = await response.json();
-        if (response.status === 201) {
-          navigate("/all-dashboard");
-        } else {
-          setError(data.detail);
-        }
-      } catch (err) {
-        setError("An error occurred");
+      const data = await response.json();
+      if (response.status === 201) {
+        navigate("/all-dashboard");
+      } else {
+        setError(data.detail);
       }
+    } catch (err) {
+      setError("An error occurred");
     }
   };
   const acceptOrDeclineInvite = async (companyid, method) => {
@@ -170,6 +136,36 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
     }
     location.reload();
   };
+  const fetchUsersForAdmin = async () => {
+    try {
+      const response = await fetch(
+        `${BaseURL}getusersforadmin/?search=${searchQuery}&model=company`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.access}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error:", errorData.detail);
+        return [];
+      }
+      const data = await response.json();
+      console.log("Users fetched:", data.all_users);
+      setUsers(data.all_users);
+      return data.all_users;
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+  const handleUserSelect = (user) => {
+    setAdmin(user.id);
+    console.log("Selected admin:", user.username);
+  };
   const isEmpty = (obj) => {
     if (obj == null) {
       return true;
@@ -185,6 +181,10 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
     fetchCompanyInfo();
     getNotifications();
   }, [company, companyInfoFetched, userInfo]);
+
+  useEffect(() => {
+    fetchUsersForAdmin();
+  }, [searchQuery]);
 
   if (loading) {
     return (
@@ -207,7 +207,7 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
         <a href="/all-dashboard">Back to company dashboard</a>
       </section>
     );
-  } else if(isEmpty(company) || userInfo?.user?.is_superuser) {
+  } else if (isEmpty(company) || userInfo?.user?.is_superuser) {
     return (
       <div className="CreateCompanyCont">
         <h2 className="CreateCompanyTitle">Create Company</h2>
@@ -223,39 +223,39 @@ const CreateCompany = ({ userInfo, setUserInfo }) => {
             onChange={(e) => setCompanyName(e.target.value)}
             required
           />
-          <button type="submit" name="Public">
+          <button type="submit" name="Public" className="CreateCompanyButton">
             Create
           </button>
         </form>
-        <section className="InvitesCont">
-          <h3 className="InvitesHead">Invites</h3>
-          {notifications.length > 0 ? (
-            notifications.map((notification) => (
-              <div className="NotificationCont" key={notification.created_at}>
-                <p className="NotificationCompany">
-                  {notification?.company?.name} has invited you to join the
-                  company
-                </p>
-                <button
-                  onClick={() =>
-                    acceptOrDeclineInvite(notification.company.id, "POST")
-                  }
-                >
-                  Accept invite
-                </button>
-                <button
-                  onClick={() =>
-                    acceptOrDeclineInvite(notification.company.id, "DELETE")
-                  }
-                >
-                  Decline invite
-                </button>
-              </div>
-            ))
-          ) : (
-            <p className="NotificationCompany">No invites yet</p>
+        {userInfo?.user?.is_superuser && (
+            <section className="AdminSection">
+              <h2 className="AdminTitle">Select Admin For Company</h2>
+              <input
+                type="text"
+                placeholder="Search Users"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="SearchBar"
+              />
+              <section className="UserList">
+                {users.map((user) => (
+                  <li
+                    key={user.id}
+                    className="UserItem"
+                    style={{ display: "flex" }}
+                  >
+                    <input
+                      type="radio"
+                      name="admin"
+                      value={user.id}
+                      onChange={() => handleUserSelect(user)}
+                    />
+                    <label>{user.username}</label>
+                  </li>
+                ))}
+              </section>
+            </section>
           )}
-        </section>
         {error && <p className="Error">{error}</p>}
       </div>
     );
