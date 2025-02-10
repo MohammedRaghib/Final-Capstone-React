@@ -356,7 +356,7 @@ const PersonalDashboard = ({ userInfo }) => {
       matchesSearchQuery
     );
   });
-  const API_URL = "http://127.0.0.1:8000/categories";
+  const API_URL = `http://127.0.0.1:8000/categories/${PersonalInfo.id}`
 
   const getCategories = async () => {
     try {
