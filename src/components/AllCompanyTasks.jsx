@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./styles/admindash.css";
+import "./styles/modal.css";
 
 const AllCompanyTasks = ({
   CompanyInfo,
@@ -18,7 +19,10 @@ const AllCompanyTasks = ({
   const [statusFilter, setStatusFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentAssignedUsers, setCurrentAssignedUsers] = useState([]);
+  const [userSearchQuery, setUserSearchQuery] = useState("");
+  const all_users = CompanyInfo.users;
   const normalizeDate = (date) => {
     date.setHours(0, 0, 0, 0);
     return date;
@@ -61,6 +65,29 @@ const AllCompanyTasks = ({
     return matchesStatus && matchesDateRange && matchesSearchQuery;
   });
 
+  const handleOpenModal = (assignedUserIds) => {
+    console.log("Assigned User IDs: ", assignedUserIds);
+    const assignedUserObjects = assignedUserIds.map((userId) => {
+      const user = all_users.find((user) => user.id === userId);
+      if (!user) {
+        console.warn(`User not found for ID ${userId}`);
+      }
+      return user || { id: userId, username: "Unknown" };
+    });
+    setCurrentAssignedUsers(assignedUserObjects);
+    setIsModalOpen(true);
+  };  
+  
+  console.log("Current Assigned Users: ", all_users, currentAssignedUsers);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setUserSearchQuery("");
+  };
+
+  const filteredUsers = currentAssignedUsers.filter((user) =>
+    user.username.toLowerCase().includes(userSearchQuery.toLowerCase())
+  );
+
   return (
     <section className="TaskCompany">
       <div className="Filters">
@@ -71,27 +98,27 @@ const AllCompanyTasks = ({
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <div className="selects">
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="select filter"
-        >
-          <option value="">All Statuses</option>
-          <option value="TODO">To do</option>
-          <option value="IN_PROGRESS">In Progress</option>
-          <option value="DONE">Done</option>
-        </select>
-        <select
-          value={dateFilter}
-          onChange={(e) => setDateFilter(e.target.value)}
-          className="select filter"
-        >
-          <option value="">All Dates</option>
-          <option value="TODAY">Today</option>
-          <option value="TOMORROW">Tomorrow</option>
-          <option value="NEXT_WEEK">Next Week</option>
-          <option value="AFTER_NEXT_WEEK">After Next Week</option>
-        </select>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="select filter"
+          >
+            <option value="">All Statuses</option>
+            <option value="TODO">To do</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="DONE">Done</option>
+          </select>
+          <select
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="select filter"
+          >
+            <option value="">All Dates</option>
+            <option value="TODAY">Today</option>
+            <option value="TOMORROW">Tomorrow</option>
+            <option value="NEXT_WEEK">Next Week</option>
+            <option value="AFTER_NEXT_WEEK">After Next Week</option>
+          </select>
         </div>
       </div>
       <div className="PersonalDashboardTasksList">
@@ -126,7 +153,7 @@ const AllCompanyTasks = ({
                     setEditingTaskId(task.id);
                     const assignedUserObjects = task.assigned_to.map(
                       (userId) =>
-                        CompanyUsers.find((user) => user.id == userId) || {
+                        all_users.find((user) => user.id === userId) || {
                           id: userId,
                           username: "Unknown",
                         }
@@ -142,6 +169,12 @@ const AllCompanyTasks = ({
                   onClick={() => DeleteTask(task.id)}
                 >
                   Delete Task
+                </button>
+                <button
+                  className="ViewAssignedUsersBtn"
+                  onClick={() => handleOpenModal(task.assigned_to)}
+                >
+                  View Assigned Users
                 </button>
                 <details className="AllComments">
                   <summary className="CommentsLabel">Comments:</summary>
@@ -178,6 +211,32 @@ const AllCompanyTasks = ({
           <p>No tasks added</p>
         )}
       </div>
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Assigned Users</h2>
+            <input
+              type="text"
+              placeholder="Search users"
+              value={userSearchQuery}
+              onChange={(e) => setUserSearchQuery(e.target.value)}
+              className="search-input"
+            />
+            <ul>
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user) => (
+                  <li key={user.id}>{user.username}</li>
+                ))
+              ) : (
+                <li>No users found</li>
+              )}
+            </ul>
+            <button onClick={handleCloseModal} className="close-button">
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
