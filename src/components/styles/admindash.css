@@ -186,7 +186,9 @@
 .AddTaskTitle {
   color: var(--accent-color);
 }
-
+.AddTaskForm{
+  padding: 20px;
+}
 .AddTaskForm input[type="text"],
 .AddTaskForm textarea,
 .AddTaskForm input[type="date"] {
