@@ -69,6 +69,7 @@ const OnePersonalDetails = ({ userInfo }) => {
       alert("Error creating task");
       console.error("Error:", error);
     }
+    navigate("/all-dashboard");
   };
 
   const fetchNotifications = async () => {
@@ -142,6 +143,7 @@ const OnePersonalDetails = ({ userInfo }) => {
       console.error("Error editing task:", error);
       alert("Failed to edit task");
     }
+    navigate("/all-dashboard");
   };
 
   const addComment = async (taskId, commentText) => {
@@ -166,7 +168,7 @@ const OnePersonalDetails = ({ userInfo }) => {
       console.error("Error adding comment:", error);
       alert("Failed to add comment");
     }
-    location.reload();
+    navigate("/all-dashboard");
   };
 
   const DeleteTask = async (taskid) => {
@@ -192,7 +194,7 @@ const OnePersonalDetails = ({ userInfo }) => {
     } finally {
       setLoading(false);
     }
-    location.reload();
+    navigate("/all-dashboard");
   };
   const updateTaskStatus = async (taskid, status) => {
     try {
@@ -219,7 +221,7 @@ const OnePersonalDetails = ({ userInfo }) => {
       console.error("Error updating task status:", error);
       alert("Failed to update task status");
     }
-    location.reload();
+    navigate("/all-dashboard");
   };
 
   const [PersonalView, setPersonalView] = useState("all_tasks");
