@@ -62,11 +62,18 @@ function Nav({ userInfo, setUserInfo }) {
             </li>
           )}
         </section>
+        <section className="NewUserAndLogout">
+        <li className="Navitem">
+          <a className="Navlink" href="/register-user">
+            Register New User
+          </a>
+        </li>
         <li className="Navitem">
           <a className="Navlink" onClick={handleLogOut}>
             Logout
           </a>
         </li>
+        </section>
       </nav>
     </>
   );

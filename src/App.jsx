@@ -13,6 +13,7 @@ import Profile from "./components/Profile";
 import CreatePersonal from "./components/CreatePersonal";
 import PersonalDashboard from "./components/PersonalDashboard";
 import OnePersonalDetails from "./components/OnePersonalDetails";
+import AdminRegisterUser from "./components/AdminRegisterUser";
 
 const App = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -53,6 +54,20 @@ const App = () => {
                 <Register setUserInfo={setUserInfo} />
               ) : (
                 <AdminDashboard userInfo={userInfo} setUserInfo={setUserInfo} />
+              )
+            }
+          />
+          <Route
+            path="/register-user"
+            element={
+              userInfo ? (
+                userInfo.user.is_superuser ? (
+                  <AdminRegisterUser userInfo={userInfo} />
+                ) : (
+                  <Login userInfo={userInfo} setUserInfo={setUserInfo} />
+                )
+              ) : (
+                <Login setUserInfo={setUserInfo} />
               )
             }
           />

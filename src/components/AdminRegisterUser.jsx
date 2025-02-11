@@ -50,13 +50,14 @@ function AdminRegisterUser() {
       setError("An error occurred");
     } finally {
       setLoading(false);
+      navigate("/all-dashboard");
     }
   };
 
   return (
     <div className="register-container">
       <main className="reginsidecont">
-        <h1>Register</h1>
+        <h1>Register New User</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="email"
