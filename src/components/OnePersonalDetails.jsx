@@ -310,6 +310,7 @@ const OnePersonalDetails = ({ userInfo }) => {
       matchesStatus && categoryMatches && matchesDateRange && matchesSearchQuery
     );
   });
+  console.log("PersonalInfo:", PersonalInfo);
   const API_URL = `http://127.0.0.1:8000/categories/${PersonalInfo.id}`
 
   const getCategories = async () => {

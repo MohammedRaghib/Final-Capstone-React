@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Await, Link, useNavigate } from "react-router-dom";
 import "./styles/personaldash.css";
 
 const PersonalDashboard = ({ userInfo }) => {
   const [personal, setPersonal] = useState();
+  const [personalid, setPersonalId] = useState("");
   const [loading, setLoading] = useState(true);
   const [personalInfoFetched, setPersonalInfoFetched] = useState(false);
   const [allCategories, setAllCategories] = useState([]);
@@ -51,29 +52,30 @@ const PersonalDashboard = ({ userInfo }) => {
 
   useEffect(() => {
     const fetchPersonalInfo = async () => {
-      if (personal && !personalInfoFetched) {
-        const firstPersonal = personal;
-        if (firstPersonal.id) {
-          try {
-            const response = await fetch(`${BaseURL}companies/`, {
-              headers: {
-                Authorization: `Bearer ${userInfo.access}`,
-              },
-            });
-            const data = await response.json();
-            setPersonalInfo(data.personal || {});
-            setTasks(PersonalInfo.tasks || []);
-            setPersonalInfoFetched(true);
-            console.log("PersonalInfo:", data);
-          } catch (error) {
-            console.error("Error fetching personal info:", error);
-          }
+      if (personal && personal.id && !personalInfoFetched) {
+        try {
+          const response = await fetch(`${BaseURL}companies/`, {
+            headers: {
+              Authorization: `Bearer ${userInfo.access}`,
+            },
+          });
+          const data = await response.json();
+          setPersonalInfo(data.personal || {});
+          setTasks(data.personal.tasks || []);
+          setPersonalInfoFetched(true);
+          setPersonalId(data.personal.id);
+          console.log("PersonalInfo:", data);
+        } catch (error) {
+          console.error("Error fetching personal info:", error);
         }
       }
     };
     fetchPersonalInfo();
   }, [personal, personalInfoFetched, userInfo]);
 
+  const API_URL = `http://127.0.0.1:8000/categories/${personalid}`;
+  console.log("API URL:", API_URL);
+  
   const DeletePersonal = async () => {
     try {
       const response = await fetch(
@@ -350,34 +352,42 @@ const PersonalDashboard = ({ userInfo }) => {
       task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       task?.category?.name.toLowerCase().includes(searchQuery.toLowerCase());
     return (
-      matchesStatus &&
-      categoryMatches &&
-      matchesDateRange &&
-      matchesSearchQuery
+      matchesStatus && categoryMatches && matchesDateRange && matchesSearchQuery
     );
   });
-  const API_URL = `http://127.0.0.1:8000/categories/${PersonalInfo.id}`
 
-  const getCategories = async () => {
-    try {
-      const response = await fetch(`${API_URL}/`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo?.access}`,
-        },
-      });
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Categories:", data);
-        setAllCategories(data.categories || []);
-      } else {
-        console.error(data.detail);
+useEffect(() => {
+  if (personalid) {
+    const API_URL = `http://127.0.0.1:8000/categories/${personalid}`;
+    console.log("API URL:", API_URL);
+
+    const getCategories = async () => {
+      try {
+        const response = await fetch(`${API_URL}/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo?.access}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log("Categories:", data);
+          setAllCategories(data.categories || []);
+        } else {
+          console.error(data.detail);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
       }
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
+    };
+
+    getCategories();
+  }
+  else{
+  console.log('help me')
+  }
+}, [personalid, userInfo]);
 
   const createCategory = async (name, personalId) => {
     try {
@@ -451,7 +461,6 @@ const PersonalDashboard = ({ userInfo }) => {
   };
 
   useEffect(() => {
-    getCategories();
     fetchNotifications();
   }, []);
 
@@ -467,7 +476,9 @@ const PersonalDashboard = ({ userInfo }) => {
     return (
       <div className="ElseContainer">
         <p>You are not part of any personal.</p>
-        <Link to="/create-personal"><b>Create Personal</b></Link>
+        <Link to="/create-personal">
+          <b>Create Personal</b>
+        </Link>
       </div>
     );
   } else {
