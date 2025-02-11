@@ -242,7 +242,6 @@ const CreateCompany = ({ userInfo }) => {
                   <li
                     key={user.id}
                     className="UserItem"
-                    style={{ display: "flex" }}
                   >
                     <input
                       type="radio"

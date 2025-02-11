@@ -64,16 +64,17 @@
 }
 
 .UserItem {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 5px;
   background-color: var(--primary-color);
   color: var(--text-color);
   border: 1px solid var(--border-color);
   padding: 10px;
   border-radius: 8px;
-  display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
-
 
 
 .Error {
