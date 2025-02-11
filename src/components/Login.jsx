@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './styles/login.css'
+import "./styles/login.css";
 
 const Login = ({ setUserInfo, userInfo }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const BaseURL = "http://127.0.0.1:8000/";
@@ -30,42 +31,46 @@ const Login = ({ setUserInfo, userInfo }) => {
       }
     } catch (err) {
       setError("An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
-  
-  console.log('TaskPlan#2025!*')
+
+  console.log("TaskPlan#2025!*");
   return (
     <div className="login-container">
       <main className="logininsidecont">
-      {userInfo ? (
-        <div className="AlreadyLoggedin">
-          <p>You are already logged in</p>
-          <a href="/">Home</a>
-        </div>
-      ) : (
-        <div className="LoginView">
-          <h1>Login</h1>
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button type="submit">Login</button>
-          </form>
-          {error && <p>{error}</p>}
-          <p>Dont have an account? <a href="/register">Register</a></p>
-        </div>
-      )}
+        {userInfo ? (
+          <div className="AlreadyLoggedin">
+            <p>You are already logged in</p>
+            <a href="/">Home</a>
+          </div>
+        ) : (
+          <div className="LoginView">
+            <h1>Login</h1>
+            <form onSubmit={(e) => handleSubmit(e)}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button type="submit">{loading ? "Loading..." : "Login"}</button>
+            </form>
+            {error && <p>{error}</p>}
+            <p>
+              Dont have an account? <a href="/register">Register</a>
+            </p>
+          </div>
+        )}
       </main>
     </div>
   );

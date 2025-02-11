@@ -156,7 +156,7 @@ function Profile({ userInfo, setUserInfo }) {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Password"
+              placeholder="Change Password"
               className="ProfPassword"
             />
             <button type="submit" className="Savebtn">

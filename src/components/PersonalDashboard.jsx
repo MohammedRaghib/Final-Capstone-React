@@ -467,7 +467,7 @@ const PersonalDashboard = ({ userInfo }) => {
     return (
       <div className="ElseContainer">
         <p>You are not part of any personal.</p>
-        <Link to="/create-personal">Create Personal</Link>
+        <Link to="/create-personal"><b>Create Personal</b></Link>
       </div>
     );
   } else {

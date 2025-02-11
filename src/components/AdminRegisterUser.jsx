@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles/register.css";
 
-const Register = ({ setUserInfo }) => {
+function AdminRegisterUser() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [first_name, setFirstName] = useState("");
@@ -10,8 +10,8 @@ const Register = ({ setUserInfo }) => {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const BaseURL = "http://127.0.0.1:8000/";
 
   const handleSubmit = async (e) => {
@@ -50,7 +50,6 @@ const Register = ({ setUserInfo }) => {
       setError("An error occurred");
     } finally {
       setLoading(false);
-      navigate("/login");
     }
   };
 
@@ -104,12 +103,9 @@ const Register = ({ setUserInfo }) => {
           <button type="submit">{loading ? "Loading..." : "Register"}</button>
         </form>
         {error && <p>{error}</p>}
-        <p>
-          Already have an account? <a href="/login">Login</a>
-        </p>
       </main>
     </div>
   );
-};
+}
 
-export default Register;
+export default AdminRegisterUser;
