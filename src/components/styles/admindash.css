@@ -218,6 +218,8 @@
 
 .AddTaskForm input[type="submit"] {
   background-color: var(--accent-color);
+  width: 30%;
+  margin-top: 10px;
   color: white;
   padding: 10px 20px;
   border: none;
