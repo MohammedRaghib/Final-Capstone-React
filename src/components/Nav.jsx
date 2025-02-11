@@ -37,14 +37,18 @@ function Nav({ userInfo, setUserInfo }) {
               />
             </a>
           </li>
-          {!userInfo?.user?.is_superuser && (<li className="Navitem">
-            <a className="Navlink" href="/all-dashboard">
-              Company Dashboard
-            </a>
-          </li>)}
+          {!userInfo?.user?.is_superuser && (
+            <li className="Navitem">
+              <a className="Navlink" href="/all-dashboard">
+                Company Dashboard
+              </a>
+            </li>
+          )}
           <li className="Navitem">
             <a className="Navlink" href="/personal-dashboard">
-              {!userInfo?.user?.is_superuser ? ('Personal Dashboard'): 'Dashboard'}
+              {!userInfo?.user?.is_superuser
+                ? "Personal Dashboard"
+                : "Dashboard"}
             </a>
           </li>
           {userInfo?.user?.is_superuser && (
@@ -63,16 +67,18 @@ function Nav({ userInfo, setUserInfo }) {
           )}
         </section>
         <section className="NewUserAndLogout">
-        <li className="Navitem">
-          <a className="Navlink" href="/register-user">
-            Register New User
-          </a>
-        </li>
-        <li className="Navitem">
-          <a className="Navlink" onClick={handleLogOut}>
-            Logout
-          </a>
-        </li>
+          {userInfo?.user?.is_superuser && (
+            <li className="Navitem">
+              <a className="Navlink" href="/register-user">
+                Register New User
+              </a>
+            </li>
+          )}
+          <li className="Navitem">
+            <a className="Navlink" onClick={handleLogOut}>
+              Logout
+            </a>
+          </li>
         </section>
       </nav>
     </>
