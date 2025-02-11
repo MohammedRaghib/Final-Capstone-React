@@ -74,9 +74,7 @@
   margin-bottom: 10px;
 }
 
-.RadioButton {
-  margin-right: 10px;
-}
+
 
 .Error {
   color: red;
@@ -86,4 +84,5 @@
 .UserList{
   display: flex;
   margin: 0;
+  flex-wrap: wrap;
 }
