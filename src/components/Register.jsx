@@ -43,15 +43,15 @@ const Register = ({ setUserInfo }) => {
       if (response.status === 201) {
         alert("Successfully Registered!");
         console.log(data);
+      setLoading(false);
+      navigate("/login");
       } else {
         setError(data.detail);
       }
     } catch (err) {
       setError("An error occurred");
-    } finally {
-      setLoading(false);
-      navigate("/login");
     }
+    setLoading(false);
   };
 
   return (

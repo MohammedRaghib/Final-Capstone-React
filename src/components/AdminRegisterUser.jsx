@@ -43,14 +43,15 @@ function AdminRegisterUser() {
       if (response.status === 201) {
         alert("Successfully Registered!");
         console.log(data);
+        setLoading(false);
+        navigate("/all-dashboard");
       } else {
         setError(data.detail);
+        setLoading(false);
       }
     } catch (err) {
       setError("An error occurred");
-    } finally {
       setLoading(false);
-      navigate("/all-dashboard");
     }
   };
 
