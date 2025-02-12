@@ -505,7 +505,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("Notification not deleted");
+        alert('Delete notification');
       });
     location.reload();
   };

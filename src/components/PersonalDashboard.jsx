@@ -635,7 +635,7 @@ const PersonalDashboard = ({ userInfo }) => {
                                 taskTitle: task.title,
                                 taskDescription: task.description,
                                 dueDate: task.due_date,
-                                category: task.category.id,
+                                category: task?.category?.id || "",
                                 status: task.status,
                               });
                               setPersonalView("add_task");
