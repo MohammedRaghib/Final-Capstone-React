@@ -3,9 +3,12 @@ import React from "react";
 const Notification = ({ notification, delNotification }) => (
   <div className="NotificationCont">
     <div>
-      <h2 className="NotificationTitle">
-        {notification?.task ? "Task is almost due" : "Invite update"}
-      </h2>
+      <div className="NotificationHeader">
+        <h2 className="NotificationTitle">
+          {notification?.task ? "Task is almost due" : "Notification"}
+        </h2>
+        <span>{notification?.created_at.split("T")[0]}</span>
+      </div>
       <div className="NotificationMessageAndBtnCont">
         <p className="NotificationMessage">{notification.message}</p>
         <button

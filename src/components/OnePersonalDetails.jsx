@@ -32,7 +32,7 @@ const OnePersonalDetails = ({ userInfo }) => {
   const DeletePersonal = async () => {
     try {
       const response = await fetch(
-        `${BaseURL}create-personal/${userInfo?.user?.id}/`,
+        `${BaseURL}create-personal/${userInfo?.user?.id}/${PersonalInfo?.id}/`,
         {
           method: "DELETE",
           headers: {
@@ -311,7 +311,7 @@ const OnePersonalDetails = ({ userInfo }) => {
     );
   });
   console.log("PersonalInfo:", PersonalInfo);
-  const API_URL = `http://127.0.0.1:8000/categories/${PersonalInfo.id}`
+  const API_URL = `http://127.0.0.1:8000/categories/${PersonalInfo.id}`;
 
   const getCategories = async () => {
     try {
@@ -552,12 +552,13 @@ const OnePersonalDetails = ({ userInfo }) => {
                         <button
                           className="EditTaskBtn"
                           onClick={() => {
-                            setEditingTaskId(task.id);
+                            const editingTaskID = task.id;
+                            setEditingTaskId(editingTaskID);
                             setTaskForm({
                               taskTitle: task.title,
                               taskDescription: task.description,
                               dueDate: task.due_date,
-                              category: task.category.id,
+                              category: task?.category?.id || "",
                               status: task.status,
                             });
                             setPersonalView("add_task");
@@ -585,11 +586,17 @@ const OnePersonalDetails = ({ userInfo }) => {
                             Add Comment
                           </button>
                           <article className="TaskComments">
-                            {task.comments.map((comment) => (
-                              <div key={comment.id} className="Comment">
-                                <p className="CommentContent">{comment.text}</p>
-                              </div>
-                            ))}
+                            {task.comments.length > 0 ? (
+                              task.comments.map((comment) => (
+                                <div key={comment.id} className="Comment">
+                                  <p className="CommentContent">
+                                    {comment.text}
+                                  </p>
+                                </div>
+                              ))
+                            ) : (
+                              <div>No comments found</div>
+                            )}
                           </article>
                         </details>
                       </div>
@@ -610,17 +617,20 @@ const OnePersonalDetails = ({ userInfo }) => {
                 userNotifications
                   .filter((not) => !not.company)
                   .map((notification) => (
-                    <div key={notification.id} className="Notification">
-                      <p className="NotificationContent">
-                        {notification.message}
-                      </p>
-                      <button
-                        onClick={() =>
-                          delNotification(userInfo.user.id, notification.id)
-                        }
-                      >
-                        Delete
-                      </button>
+                    <div key={notification.id} className="NotificationCont">
+                      <span>{notification?.created_at.split("T")[0]}</span>
+                      <div className="NotificationHeader">
+                        <p className="NotificationMessage">
+                          {notification.message}
+                        </p>
+                        <button
+                          onClick={() =>
+                            delNotification(userInfo.user.id, notification.id)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   ))
               ) : (

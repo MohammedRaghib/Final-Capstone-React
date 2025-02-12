@@ -75,11 +75,11 @@ const PersonalDashboard = ({ userInfo }) => {
 
   const API_URL = `http://127.0.0.1:8000/categories/${personalid}`;
   console.log("API URL:", API_URL);
-  
+
   const DeletePersonal = async () => {
     try {
       const response = await fetch(
-        `${BaseURL}create-personal/${userInfo?.user?.id}/`,
+        `${BaseURL}create-personal/${userInfo?.user?.id}/${PersonalInfo?.id}/`,
         {
           method: "DELETE",
           headers: {
@@ -356,38 +356,37 @@ const PersonalDashboard = ({ userInfo }) => {
     );
   });
 
-useEffect(() => {
-  if (personalid) {
-    const API_URL = `http://127.0.0.1:8000/categories/${personalid}`;
-    console.log("API URL:", API_URL);
+  useEffect(() => {
+    if (personalid) {
+      const API_URL = `http://127.0.0.1:8000/categories/${personalid}`;
+      console.log("API URL:", API_URL);
 
-    const getCategories = async () => {
-      try {
-        const response = await fetch(`${API_URL}/`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userInfo?.access}`,
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          console.log("Categories:", data);
-          setAllCategories(data.categories || []);
-        } else {
-          console.error(data.detail);
+      const getCategories = async () => {
+        try {
+          const response = await fetch(`${API_URL}/`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userInfo?.access}`,
+            },
+          });
+          const data = await response.json();
+          if (response.ok) {
+            console.log("Categories:", data);
+            setAllCategories(data.categories || []);
+          } else {
+            console.error(data.detail);
+          }
+        } catch (error) {
+          console.error("Error fetching categories:", error);
         }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+      };
 
-    getCategories();
-  }
-  else{
-  console.log('help me')
-  }
-}, [personalid, userInfo]);
+      getCategories();
+    } else {
+      console.log("help me");
+    }
+  }, [personalid, userInfo]);
 
   const createCategory = async (name, personalId) => {
     try {
@@ -666,13 +665,17 @@ useEffect(() => {
                               Add Comment
                             </button>
                             <article className="TaskComments">
-                              {task.comments.map((comment) => (
-                                <div key={comment.id} className="Comment">
-                                  <p className="CommentContent">
-                                    {comment.text}
-                                  </p>
-                                </div>
-                              ))}
+                              {task.comments.length > 0 ? (
+                                task.comments.map((comment) => (
+                                  <div key={comment.id} className="Comment">
+                                    <p className="CommentContent">
+                                      {comment.text}
+                                    </p>
+                                  </div>
+                                ))
+                              ) : (
+                                <div>No comments found</div>
+                              )}
                             </article>
                           </details>
                         </div>
@@ -692,17 +695,20 @@ useEffect(() => {
                   userNotifications
                     .filter((not) => !not.company)
                     .map((notification) => (
-                      <div key={notification.id} className="Notification">
-                        <p className="NotificationContent">
-                          {notification.message}
-                        </p>
-                        <button
-                          onClick={() =>
-                            delNotification(userInfo.user.id, notification.id)
-                          }
-                        >
-                          Delete
-                        </button>
+                      <div key={notification.id} className="NotificationCont">
+                        <span>{notification?.created_at.split("T")[0]}</span>
+                        <div className="NotificationHeader"> 
+                          <p className="NotificationMessage">
+                            {notification.message}
+                          </p>
+                          <button
+                            onClick={() =>
+                              delNotification(userInfo.user.id, notification.id)
+                            }
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     ))
                 ) : (

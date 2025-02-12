@@ -186,7 +186,7 @@
 .AddTaskTitle {
   color: var(--accent-color);
 }
-.AddTaskForm{
+.AddTaskForm {
   padding: 20px;
 }
 .AddTaskForm input[type="text"],
@@ -383,6 +383,11 @@
 
 .NotificationMessageAndBtnCont,
 .Notification {
+  display: flex;
+  justify-content: space-between;
+}
+
+.NotificationHeader {
   display: flex;
   justify-content: space-between;
 }

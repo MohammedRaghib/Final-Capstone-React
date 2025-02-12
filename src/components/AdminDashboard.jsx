@@ -753,11 +753,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
                     return (
                       <li key={task.id} className="Task">
                         <div className="TaskCont">
-                          <h3
-                            className="TaskTitle"
-                          >
-                            {task.title}
-                          </h3>
+                          <h3 className="TaskTitle">{task.title}</h3>
                           <p className="TaskDesc">{task.description}</p>
                           <code className="TaskDueDate">
                             Due date: {task.due_date}
@@ -830,6 +826,9 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
                             New notification
                           </h2>
                           <div className="NotificationMessageAndBtnCont">
+                            <span>
+                              {notification?.created_at.split("T")[0]}
+                            </span>
                             <p className="NotificationMessage">
                               {notification.message}
                             </p>
