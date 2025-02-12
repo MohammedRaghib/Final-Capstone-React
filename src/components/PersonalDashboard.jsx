@@ -291,7 +291,7 @@ const PersonalDashboard = ({ userInfo }) => {
       .then((response) => {
         if (response.status === 204) {
           console.log("Notification deleted");
-          alert("Notification marked as read");
+          alert("Notification deleted");
         } else if (response.status === 404) {
           return response.json().then((data) => {
             console.log(data.detail);
@@ -304,7 +304,7 @@ const PersonalDashboard = ({ userInfo }) => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("Notification not marked as read");
+        alert("Notification not deleted");
       });
     location.reload();
   };
