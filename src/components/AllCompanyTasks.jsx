@@ -22,8 +22,6 @@ const AllCompanyTasks = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentAssignedUsers, setCurrentAssignedUsers] = useState([]);
   const [userSearchQuery, setUserSearchQuery] = useState("");
-  const [FilteredTasks, setFilteredTasks] = useState([]);
-
   const all_users = CompanyInfo.users;
   const normalizeDate = (date) => {
     date.setHours(0, 0, 0, 0);
@@ -53,21 +51,19 @@ const AllCompanyTasks = ({
     }
   };
 
-  const handleFilter = () => {
-    const filteredTasks = tasks.filter((task) => {
-      const matchesStatus = statusFilter ? task.status === statusFilter : true;
-      const [startDate, endDate] = getDateRange(dateFilter);
-      const taskDueDate = normalizeDate(new Date(task.due_date));
-      const matchesDateRange =
-        (!startDate || taskDueDate >= startDate) &&
-        (!endDate || taskDueDate <= endDate);
-      const matchesSearchQuery =
-        task.title.toLowerCase().includes(TaskSearchQuery.toLowerCase()) ||
-        task.description.toLowerCase().includes(TaskSearchQuery.toLowerCase());
-      return matchesStatus && matchesDateRange && matchesSearchQuery;
-    });
-    setFilteredTasks(filteredTasks);
-  };
+  const filteredTasks = CompanyInfo.tasks.filter((task) => {
+    const matchesStatus = statusFilter ? task.status === statusFilter : true;
+    const [startDate, endDate] = getDateRange(dateFilter);
+    const taskDueDate = normalizeDate(new Date(task.due_date));
+    const matchesDateRange =
+      (!startDate || taskDueDate >= startDate) &&
+      (!endDate || taskDueDate <= endDate);
+    const matchesSearchQuery =
+      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesStatus && matchesDateRange && matchesSearchQuery;
+  });
 
   const handleOpenModal = (assignedUserIds) => {
     console.log("Assigned User IDs: ", assignedUserIds);
@@ -80,8 +76,8 @@ const AllCompanyTasks = ({
     });
     setCurrentAssignedUsers(assignedUserObjects);
     setIsModalOpen(true);
-  };
-
+  };  
+  
   console.log("Current Assigned Users: ", all_users, currentAssignedUsers);
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -95,17 +91,12 @@ const AllCompanyTasks = ({
   return (
     <section className="TaskCompany">
       <div className="Filters">
-        <div className="searchAndfilter">
-          <input
-            type="text"
-            placeholder="Search tasks"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button onClick={handleFilter} className="FilterButton">
-            Filter
-          </button>
-        </div>
+        <input
+          type="text"
+          placeholder="Search tasks"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
         <div className="selects">
           <select
             value={statusFilter}

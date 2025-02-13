@@ -337,22 +337,24 @@ const PersonalDashboard = ({ userInfo }) => {
     }
   };
 
-  const [FilteredTasks, setFilteredTasks] = useState([]);
-  const handleFilter = () => {
-    const filteredTasks = tasks.filter((task) => {
-      const matchesStatus = statusFilter ? task.status === statusFilter : true;
-      const [startDate, endDate] = getDateRange(dateFilter);
-      const taskDueDate = normalizeDate(new Date(task.due_date));
-      const matchesDateRange =
-        (!startDate || taskDueDate >= startDate) &&
-        (!endDate || taskDueDate <= endDate);
-      const matchesSearchQuery =
-        task.title.toLowerCase().includes(TaskSearchQuery.toLowerCase()) ||
-        task.description.toLowerCase().includes(TaskSearchQuery.toLowerCase());
-      return matchesStatus && matchesDateRange && matchesSearchQuery;
-    });
-    setFilteredTasks(filteredTasks);
-  };
+  const filteredTasks = PersonalInfo?.tasks?.filter((task) => {
+    const matchesStatus = statusFilter ? task.status === statusFilter : true;
+    const categoryMatches = catergoryFilter
+      ? task?.category?.id === parseInt(catergoryFilter)
+      : true;
+    const [startDate, endDate] = getDateRange(dateFilter);
+    const taskDueDate = normalizeDate(new Date(task.due_date));
+    const matchesDateRange =
+      (!startDate || taskDueDate >= startDate) &&
+      (!endDate || taskDueDate <= endDate);
+    const matchesSearchQuery =
+      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task?.category?.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return (
+      matchesStatus && categoryMatches && matchesDateRange && matchesSearchQuery
+    );
+  });
 
   useEffect(() => {
     if (personalid) {
@@ -540,17 +542,12 @@ const PersonalDashboard = ({ userInfo }) => {
             <div className="PersonalDashboardTasks">
               <div className="PersonalDashboardTasksMain">
                 <div className="Filters">
-                <div className="searchAndfilter">
                   <input
                     type="text"
                     placeholder="Search tasks"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <button onClick={handleFilter} className="FilterButton">
-                    Filter
-                  </button>
-                </div>
                   <div className="selects">
                     <select
                       value={statusFilter}
@@ -588,8 +585,8 @@ const PersonalDashboard = ({ userInfo }) => {
                   </div>
                 </div>
                 <div className="PersonalDashboardTasksList">
-                  {FilteredTasks?.length > 0 ? (
-                    FilteredTasks.map((task) => {
+                  {filteredTasks?.length > 0 ? (
+                    filteredTasks.map((task) => {
                       return (
                         <div key={task.id} className="PersonalDashboardTask">
                           <h3 className="PersonalDashboardTaskTitle">
