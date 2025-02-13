@@ -518,3 +518,19 @@
 .InviteButton:last-child {
   margin-right: 0;
 }
+.searchAndfilter{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.FilterButton{
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 20px;
+}
+.FilterButton:hover{
+  background-color: var(--link-color);
+}
