@@ -477,22 +477,32 @@
 .FilterButton:hover {
   background-color: var(--link-color);
 }
+
+.NameAndLeave{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}
+
 @media (max-width: 780px) {
   .container-dashboard {
-    display: grid !important;
-    grid-template-columns: auto !important;
+    display: grid;
+    grid-template-columns: auto;
     justify-content: center;
     align-items: center;
-    width: 100% !important;
+    width: 100%;
   }
+
   .Sidebar {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    height: 100px !important;
-    min-height: 100px !important;
+    height: 100px;
+    min-height: 100px;
   }
+  
   .AllEmployeeNotifications {
-    width: 100% !important;
+    width: 100%;
   }
 }
