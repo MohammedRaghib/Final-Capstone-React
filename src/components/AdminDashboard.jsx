@@ -482,7 +482,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
   };
 
   const delNotification = (userid, notificationId) => {
-    fetch(`${BaseURL}/notifications/${userid}/${notificationId}/`, {
+    fetch(`${BaseURL}notifications/${userid}/${notificationId}/`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -505,7 +505,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert('Delete notification');
+        alert("Delete notification");
       });
     location.reload();
   };

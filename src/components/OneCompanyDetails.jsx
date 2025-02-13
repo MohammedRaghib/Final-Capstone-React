@@ -323,8 +323,8 @@ function OneCompanyDetails({ userInfo }) {
     }
     navigate("/all-dashboard");
   };
-  const delNotification = (userid, notificationId) => {
-    fetch(`${BaseURL}/notifications/${userid}/${notificationId}/`, {
+  const delNotification = async (userid, notificationId) => {
+    fetch(`${BaseURL}notifications/${userid}/${notificationId}/`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -334,6 +334,7 @@ function OneCompanyDetails({ userInfo }) {
       .then((response) => {
         if (response.status === 204) {
           console.log("Notification deleted");
+          alert("Notification deleted");
         } else if (response.status === 404) {
           return response.json().then((data) => {
             console.log(data.detail);
@@ -346,8 +347,11 @@ function OneCompanyDetails({ userInfo }) {
       })
       .catch((error) => {
         console.error("Error:", error);
+        alert("Delete notification");
+      })
+      .finally(() => {
+        navigate("/all-dashboard");
       });
-    navigate("/all-dashboard");
   };
   const updateTaskStatus = async (taskid, status) => {
     try {
@@ -423,7 +427,7 @@ function OneCompanyDetails({ userInfo }) {
     } catch (error) {
       console.error("Error deleting company:", error);
     }
-    navigate('/all-dashboard')
+    navigate("/all-dashboard");
   };
 
   if (!CompanyInfo) {
@@ -438,14 +442,14 @@ function OneCompanyDetails({ userInfo }) {
       <div className="container-dashboard">
         <aside className="Sidebar">
           <nav className="SideNav">
-              <li className="SideNavItem">
-                <button
-                  onClick={() => setCompView("CompanyInfo_users")}
-                  className="SideNavLink"
-                >
-                  All Company Users
-                </button>
-              </li>
+            <li className="SideNavItem">
+              <button
+                onClick={() => setCompView("CompanyInfo_users")}
+                className="SideNavLink"
+              >
+                All Company Users
+              </button>
+            </li>
             <li className="SideNavItem">
               <button
                 onClick={() => setCompView("all_tasks")}
@@ -462,14 +466,14 @@ function OneCompanyDetails({ userInfo }) {
                 All Notifications
               </button>
             </li>
-              <li className="SideNavItem">
-                <button
-                  onClick={() => setCompView("add_user")}
-                  className="SideNavLink"
-                >
-                  Invite User
-                </button>
-              </li>
+            <li className="SideNavItem">
+              <button
+                onClick={() => setCompView("add_user")}
+                className="SideNavLink"
+              >
+                Invite User
+              </button>
+            </li>
             <li className="SideNavItem">
               <button
                 onClick={() => setCompView("add_task")}
@@ -498,7 +502,7 @@ function OneCompanyDetails({ userInfo }) {
                 Delete Company
               </button>
             </aside>
-            { CompView === "CompanyInfo_users" && (
+            {CompView === "CompanyInfo_users" && (
               <AllCompanyUsers
                 CompanyInfo={CompanyInfo}
                 CompanyUsers={CompanyUsers}
