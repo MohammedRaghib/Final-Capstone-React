@@ -404,64 +404,7 @@
 .TaskTitle {
   text-align: center;
 }
-@media (max-width: 1024px) {
-  .container-dashboard {
-    grid-template-columns: 150px auto;
-  }
-}
 
-@media (max-width: 768px) {
-  .container-dashboard {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    grid-template-columns: 1fr;
-    min-height: auto;
-    overflow-x: hidden;
-  }
-
-  .Sidebar {
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    min-height: fit-content;
-    max-height: fit-content;
-    width: 100%;
-  }
-}
-.NameAndLeave,
-.PersonalDashboardHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-@media (max-width: 480px) {
-  .CompanyUser,
-  .RandomUser {
-    width: 100%;
-  }
-
-  .AddTaskForm input[type="text"],
-  .AddTaskForm textarea,
-  .AddTaskForm input[type="date"],
-  .AddUser input[type="text"] {
-    width: 100%;
-  }
-
-  .TaskComments {
-    width: 100%;
-  }
-
-  .Comment {
-    width: 100%;
-  }
-
-  .AllUsersToAssign {
-    grid-template-columns: auto auto;
-  }
-}
 .ElseContainer {
   background-color: var(--secondary-color);
   color: var(--text-color);
@@ -518,12 +461,12 @@
 .InviteButton:last-child {
   margin-right: 0;
 }
-.searchAndfilter{
+.searchAndfilter {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.FilterButton{
+.FilterButton {
   background-color: var(--accent-color);
   color: var(--text-color);
   border: none;
@@ -531,6 +474,25 @@
   cursor: pointer;
   padding: 20px;
 }
-.FilterButton:hover{
+.FilterButton:hover {
   background-color: var(--link-color);
+}
+@media (max-width: 780px) {
+  .container-dashboard {
+    display: grid !important;
+    grid-template-columns: auto !important;
+    justify-content: center;
+    align-items: center;
+    width: 100% !important;
+  }
+  .Sidebar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 100px !important;
+    min-height: 100px !important;
+  }
+  .AllEmployeeNotifications {
+    width: 100% !important;
+  }
 }
