@@ -129,10 +129,7 @@ function OverallAdmin({ userInfo }) {
             </button>
           </li>
           <li className="SideNavItem">
-            <button
-              className="SideNavLink"
-              onClick={() => handleView("users")}
-            >
+            <button className="SideNavLink" onClick={() => handleView("users")}>
               All Users
             </button>
           </li>
@@ -237,53 +234,62 @@ function OverallAdmin({ userInfo }) {
             </table>
           </div>
         )}
-        {CompView === "users" && (<div className="users">
-          <h1 className="OverallAdminDashboardTitle">All Users</h1>
-          <input
-            type="text"
-            name="users"
-            onChange={handleSearchUsers}
-            placeholder="Search Users..."
-          />
-          <br />
-          <table border="1" className="AllUsersTable">
-            <thead className="TableHeader">
-              <tr>
-                <th className="UserEmailTh">Email</th>
-                <th className="UserFirstNameTh">First Name</th>
-                <th className="UserLastNameTh">Last Name</th>
-                <th className="UserNameTh">Username</th>
-                <th className="UserActionsTh">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="TableBody">
-              {filteredUsers.length > 0 ? (
-                filteredUsers.map((user) => (
-                  <tr key={user.id}>
-                    <td className="UserEmailTd">{user.email}</td>
-                    <td className="UserFirstNameTd">{user.first_name}</td>
-                    <td className="UserLastNameTd">{user.last_name}</td>
-                    <td className="UserNameTd">{user.username}</td>
-                    <td className="UserActionsTd">
-                      <button
-                        onClick={() => deleteUser(user.id)}
-                        className="DelUser"
-                      >
-                        Delete
-                      </button>
+        {CompView === "users" && (
+          <div className="users">
+            <h1 className="OverallAdminDashboardTitle">All Users</h1>
+            <input
+              type="text"
+              name="users"
+              onChange={handleSearchUsers}
+              placeholder="Search Users..."
+            />
+            <br />
+            <table border="1" className="AllUsersTable">
+              <thead className="TableHeader">
+                <tr>
+                  <th className="UserEmailTh">Email</th>
+                  <th className="UserFirstNameTh">First Name</th>
+                  <th className="UserLastNameTh">Last Name</th>
+                  <th className="UserNameTh">Username</th>
+                  <th className="UserActionsTh">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="TableBody">
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map((user) => (
+                    <tr key={user.id}>
+                      <td className="UserEmailTd">{user.email}</td>
+                      <td className="UserFirstNameTd">{user.first_name}</td>
+                      <td className="UserLastNameTd">{user.last_name}</td>
+                      <td className="UserNameTd">{user.username}</td>
+                      <td className="UserActionsTd">
+                        <button
+                          onClick={() => {
+                            const approval = confirm(
+                              "Are you sure you want to delete this user?"
+                            );
+                            if (approval) {
+                              deleteUser(user.id);
+                            }
+                          }}
+                          className="DelUser"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td className="NotFound" colSpan={5}>
+                      No users found
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td className="NotFound" colSpan={5}>
-                    No users found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>)}
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
