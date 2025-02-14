@@ -14,7 +14,8 @@ const Notification = ({ notification, delNotification }) => (
         <button
           onClick={() => {
             console.log(notification.user);
-            delNotification(notification.user, notification.id)}}
+            delNotification(notification.user, notification.id);
+          }}
         >
           Delete
         </button>
