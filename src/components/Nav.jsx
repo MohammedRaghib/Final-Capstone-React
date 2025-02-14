@@ -2,11 +2,11 @@ import React from "react";
 import "./styles/nav.css";
 
 function Nav({ userInfo, setUserInfo }) {
-  const BaseURL = "http://127.0.0.1:8000/";
+  const BaseURL = import.meta.env.VITE_PhotoUrl;
 
   const handleLogOut = async () => {
     try {
-      const response = await fetch(`${BaseURL}api/logout/`, {
+      const response = await fetch(`${BaseURL}/api/logout/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

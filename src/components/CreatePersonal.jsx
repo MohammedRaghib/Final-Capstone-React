@@ -5,7 +5,7 @@ import { use } from "react";
 
 const CreatePersonal = ({ userInfo }) => {
   const [personalName, setPersonalName] = useState("");
-  const BaseURL = "http://127.0.0.1:8000/";
+  const BaseURL = import.meta.env.VITE_BaseURL;
   const [personalInfo, setPersonalInfo] = useState({});
   const [personalInfoFetched, setPersonalInfoFetched] = useState(false);
   const [loading, setLoading] = useState(true);

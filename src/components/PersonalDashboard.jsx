@@ -8,7 +8,7 @@ const PersonalDashboard = ({ userInfo }) => {
   const [loading, setLoading] = useState(true);
   const [personalInfoFetched, setPersonalInfoFetched] = useState(false);
   const [allCategories, setAllCategories] = useState([]);
-  const BaseURL = "http://127.0.0.1:8000/";
+  const BaseURL = import.meta.env.VITE_BaseURL;
   const [statusFilter, setStatusFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -73,7 +73,7 @@ const PersonalDashboard = ({ userInfo }) => {
     fetchPersonalInfo();
   }, [personal, personalInfoFetched, userInfo]);
 
-  const API_URL = `http://127.0.0.1:8000/categories/${personalid}`;
+  const API_URL = `${import.meta.env.VITE_BaseURL}categories/${personalid}`;
   console.log("API URL:", API_URL);
 
   const DeletePersonal = async () => {
@@ -358,7 +358,7 @@ const PersonalDashboard = ({ userInfo }) => {
 
   useEffect(() => {
     if (personalid) {
-      const API_URL = `http://127.0.0.1:8000/categories/${personalid}`;
+      const API_URL = `${import.meta.env.VITE_BaseURL}categories/${personalid}`;
       console.log("API URL:", API_URL);
 
       const getCategories = async () => {

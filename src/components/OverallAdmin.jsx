@@ -12,7 +12,7 @@ function OverallAdmin({ userInfo }) {
   const [searchPersonals, setSearchPersonals] = useState("");
   const [Users, setUsers] = useState([]);
   const [CompView, setCompView] = useState("companies");
-  const BaseURL = "http://127.0.0.1:8000/";
+  const BaseURL = import.meta.env.VITE_BaseURL;
 
   useEffect(() => {
     const fetchCompanies = async () => {

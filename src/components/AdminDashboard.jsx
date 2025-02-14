@@ -12,7 +12,7 @@ const AdminDashboard = ({ userInfo, setUserInfo }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [companyInfoFetched, setCompanyInfoFetched] = useState(false);
-  const BaseURL = "http://127.0.0.1:8000/";
+  const BaseURL = import.meta.env.VITE_BaseURL;
   const [searchQuery, setSearchQuery] = useState("");
   const [TaskSearchQuery, setTaskSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");

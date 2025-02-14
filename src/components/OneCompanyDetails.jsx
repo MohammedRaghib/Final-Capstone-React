@@ -12,7 +12,7 @@ function OneCompanyDetails({ userInfo }) {
   const CompanyInfo = company.company;
   const [CompView, setCompView] = useState("all_tasks");
   const [loading, setLoading] = useState(true);
-  const BaseURL = "http://127.0.0.1:8000/";
+  const BaseURL = import.meta.env.VITE_BaseURL;
   const [searchQuery, setSearchQuery] = useState("");
   const [AllUsers, setAllUsers] = useState([]);
   const [FilteredUsers, setFilteredUsers] = useState([]);

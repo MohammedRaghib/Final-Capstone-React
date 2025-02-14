@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import "./styles/profile.css";
 
 function Profile({ userInfo, setUserInfo }) {
-  const BaseURL = "http://127.0.0.1:8000/";
+  const BaseURL = import.meta.env.VITE_BaseURL;
+  const PhotoURL = import.meta.env.VITE_PhotoUrl;
   const [formData, setFormData] = useState({
     email: userInfo?.user.email || "",
     username: userInfo?.user.username || "",
@@ -79,7 +80,7 @@ function Profile({ userInfo, setUserInfo }) {
             alt="Profile Picture"
             src={
               userInfo?.user.profile_picture
-                ? `${BaseURL}${userInfo.user.profile_picture}`
+                ? `${PhotoURL}${userInfo.user.profile_picture}`
                 : "https://generated-images.perchance.org/image/379575b777c491789998467c91d4740cb9f75efb04e66b4568dbae5e9b982762.jpeg"
               }
           />
