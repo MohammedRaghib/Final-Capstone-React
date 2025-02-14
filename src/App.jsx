@@ -14,13 +14,12 @@ import CreatePersonal from "./components/CreatePersonal";
 import PersonalDashboard from "./components/PersonalDashboard";
 import OnePersonalDetails from "./components/OnePersonalDetails";
 import AdminRegisterUser from "./components/AdminRegisterUser";
+import NotFound from "./components/NotFound";
 
 const App = () => {
-  const [userInfo, setUserInfo] = useState(null);
-  const savedUserInfo = JSON.parse(localStorage.getItem("userInfo"));
-  useEffect(() => {
-    setUserInfo(savedUserInfo);
-  }, []);
+  const [userInfo, setUserInfo] = useState(() => {
+    return JSON.parse(localStorage.getItem("userInfo"));
+  });
 
   return (
     <>
@@ -163,6 +162,7 @@ const App = () => {
               )
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </>
