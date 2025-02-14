@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/profile.css";
 
 function Profile({ userInfo, setUserInfo }) {
@@ -71,7 +71,12 @@ function Profile({ userInfo, setUserInfo }) {
       form.style.display = "none";
     }
   };
-
+  useEffect(()=>{
+    const wakeUpBackend = async () => {
+      await fetch(BaseURL);
+    };
+    wakeUpBackend();
+  }, [])
   return (
     <div className="EverythingProf">
       <section className="profileCont">

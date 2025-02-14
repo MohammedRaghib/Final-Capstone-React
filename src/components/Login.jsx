@@ -12,7 +12,7 @@ const Login = ({ setUserInfo, userInfo }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await fetch(`${BaseURL}api/login/`, {
         method: "POST",
@@ -36,8 +36,13 @@ const Login = ({ setUserInfo, userInfo }) => {
       setLoading(false);
     }
   };
-
   console.log("TaskPlan#2025!*");
+  useEffect(() => {
+    const wakeUpBackend = async () => {
+      await fetch(BaseURL);
+    };
+    wakeUpBackend();
+  }, []);
   return (
     <div className="login-container">
       <main className="logininsidecont">
