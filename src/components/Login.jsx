@@ -12,6 +12,7 @@ const Login = ({ setUserInfo, userInfo }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       const response = await fetch(`${BaseURL}api/login/`, {
         method: "POST",
